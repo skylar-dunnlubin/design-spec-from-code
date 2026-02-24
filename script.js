@@ -261,11 +261,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. PROMPT BUILDER — Interactive Form
   // ============================================================
 
-  // -- Mode Toggle (Greenfield / Brownfield / Update) --
+  // -- Mode Toggle (Extract / Update) --
   const toggleBtns = document.querySelectorAll('.toggle-btn[data-mode]');
-  const brownfieldFields = document.querySelector('.brownfield-fields');
+  const extractFields = document.querySelector('.extract-fields');
   const updateFields = document.querySelector('.update-fields');
-  let currentMode = 'greenfield';
+  let currentMode = 'extract';
 
   toggleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -276,11 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
 
       // Show/hide mode-specific fields
-      brownfieldFields?.classList.add('hidden');
+      extractFields?.classList.add('hidden');
       updateFields?.classList.add('hidden');
 
-      if (currentMode === 'brownfield') {
-        brownfieldFields?.classList.remove('hidden');
+      if (currentMode === 'extract') {
+        extractFields?.classList.remove('hidden');
       } else if (currentMode === 'update') {
         updateFields?.classList.remove('hidden');
       }
@@ -321,20 +321,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptLabel2 = document.getElementById('prompt-label-2');
     const promptLabel3 = document.getElementById('prompt-label-3');
 
-    if (currentMode === 'greenfield') {
-      prompt1 = buildGreenfieldPrompt1(projectName, techStack, keyScreens, designSystemLine);
-      prompt2 = buildGreenfieldPrompt2(projectName, keyScreens);
-      prompt3 = buildGreenfieldPrompt3(projectName);
-      // Show all 3 blocks
-      promptBlock3?.classList.remove('hidden');
-      if (promptDesc) promptDesc.textContent = 'Run these three prompts in sequence in Claude Code. Each builds on the previous step\'s output.';
-      if (promptLabel1) promptLabel1.textContent = 'Step 1: Codebase Analysis';
-      if (promptLabel2) promptLabel2.textContent = 'Step 2: Design Decision Extraction';
-      if (promptLabel3) promptLabel3.textContent = 'Step 3: Specification Generation';
-    } else if (currentMode === 'brownfield') {
-      prompt1 = buildBrownfieldPrompt1(projectName, techStack, keyScreens, designSystemLine, existingSpec);
-      prompt2 = buildBrownfieldPrompt2(projectName, keyScreens, whatsNew);
-      prompt3 = buildBrownfieldPrompt3(projectName, existingSpec);
+    if (currentMode === 'extract') {
+      prompt1 = buildExtractPrompt1(projectName, techStack, keyScreens, designSystemLine, existingSpec);
+      prompt2 = buildExtractPrompt2(projectName, keyScreens, whatsNew);
+      prompt3 = buildExtractPrompt3(projectName, existingSpec);
       // Show all 3 blocks
       promptBlock3?.classList.remove('hidden');
       if (promptDesc) promptDesc.textContent = 'Run these three prompts in sequence in Claude Code. Each builds on the previous step\'s output.';
@@ -370,21 +360,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
   });
 
-  // -- Prompt Templates --
+  // -- Extract Mode Prompt Templates --
 
-  const buildGreenfieldPrompt1 = (projectName, techStack, keyScreens, designSystemLine) =>
-`Read the entire ${projectName} codebase (${techStack}). Map the following:
+  const buildExtractPrompt1 = (projectName, techStack, keyScreens, designSystemLine, existingSpec) => {
+    const existingLine = existingSpec
+      ? `\nCompare against the existing spec at ${existingSpec}. Identify NEW and MODIFIED elements.`
+      : '';
+    return `Read the entire ${projectName} codebase (${techStack}). Map the following:
 1. Every screen/page: name, route, purpose
 2. Component tree: parent-child relationships for ${keyScreens}
 3. Shared components, hooks, and utilities
 4. Data models and API endpoints consumed
 5. Navigation structure and user flows
 6. Design system usage: tokens, theme, shared styles
-${designSystemLine}
+7. Identify all component states and their trigger conditions
+8. Map entry/exit points for every user flow with preconditions
+9. Extract data validation rules, valid ranges, and error triggers
+${designSystemLine}${existingLine}
 Output a structured codebase analysis document.`.trim();
+  };
 
-  const buildGreenfieldPrompt2 = (projectName, keyScreens) =>
-`Using the codebase analysis of ${projectName}, extract every design decision:
+  const buildExtractPrompt2 = (projectName, keyScreens, whatsNew) => {
+    const focusLine = whatsNew
+      ? `\nFocus on changes only. For modified components, document BEFORE and AFTER behavior.\nChanges: ${whatsNew}`
+      : '';
+    return `Using the codebase analysis of ${projectName}, extract every design decision:
 1. Layout patterns: grid systems, responsive behavior, page structure
 2. Component states: all states each component handles (default, hover, active, disabled, error, loading)
 3. Interaction patterns: forms, modals, navigation, real-time updates, gestures
@@ -398,91 +398,50 @@ For each decision, document:
 - The rationale (why this approach vs alternatives)
 - The code file and line range where it's implemented
 
-Focus on: ${keyScreens}`;
+For each component state, document:
+- The precondition that triggers it
+- The visual change
+- The acceptance criterion (how to verify it's correct)
 
-  const buildGreenfieldPrompt3 = (projectName) =>
-`Generate a complete Design Specification document for ${projectName} following this 11-section structure:
+For each interaction, document:
+- Precondition \u2192 action \u2192 expected outcome \u2192 postcondition
+
+For each data display rule, document:
+- Valid input range, formatting rule, edge case handling, error state
+${focusLine}
+Focus on: ${keyScreens}`;
+  };
+
+  const buildExtractPrompt3 = (projectName, existingSpec) => {
+    const refLine = existingSpec
+      ? `\nReference parent spec: ${existingSpec}\nClearly distinguish NEW vs MODIFIED elements throughout.`
+      : '';
+    return `Generate a complete Design Specification document for ${projectName} following this 12-section structure:
 
 1. Document Header (version, date, scope, regulatory refs: FDA 21 CFR 820.30, IEC 62304, IEC 62366)
 2. Design Intent (purpose, user needs addressed, design input references)
 3. Screen Inventory (every screen: name, purpose, navigation path)
-4. Component Specification (each component: visual description, all states, behavior, accessibility)
+4. Component Specification (each component: visual description, all states, behavior, acceptance criteria, data contract, accessibility assertions)
 5. Layout & Visual Design (grid, spacing, typography, color, responsive breakpoints)
-6. Interaction Design (user flows, transitions, error states, loading, edge cases)
-7. Data Display (data-to-UI mapping, formatting, empty/error states)
+6. Interaction Design (user flows with precondition/postcondition per step, entry/exit conditions, error paths with recovery, edge case table)
+7. Data Display (field format rules, valid ranges, edge case handling, error states)
 8. Design Rationale (why each choice was made, alternatives considered, traces to user needs)
 9. Design System Alignment (tokens used, patterns reused, deviations justified)
-10. Accessibility (WCAG compliance, contrast, keyboard nav, screen reader, touch targets)
+10. Accessibility (WCAG compliance with automated test assertions: contrast, keyboard, screen reader, touch targets)
 11. Traceability Matrix (user needs \u2192 design inputs \u2192 spec sections \u2192 code files)
+12. Verification Summary (component verification checklist, flow verification checklist, data verification rules, traceability verification)
 
 Requirements:
 - Reference specific code files for every component and screen
-- Include ALL component states from the extraction
-- Document every user flow with error paths
+- Include acceptance criteria for every component state
+- Include precondition/postcondition for every user flow
+- Include a Verification Summary (\u00a712) that consolidates all pass/fail criteria
+- The spec must be usable as a verification oracle \u2014 a human or AI should be able to read it and determine whether the production code is correct
 - Use formal regulatory language suitable for a Design History File
 - The traceability matrix must link to actual code file paths
-
+${refLine}
 Output as a single Markdown document ready for review.`;
-
-  const buildBrownfieldPrompt1 = (projectName, techStack, keyScreens, designSystemLine, existingSpec) =>
-`Read the entire ${projectName} codebase (${techStack}). Map the following:
-1. Every screen/page: name, route, purpose
-2. Component tree: parent-child relationships for ${keyScreens}
-3. Shared components, hooks, and utilities
-4. Data models and API endpoints consumed
-5. Navigation structure and user flows
-6. Design system usage: tokens, theme, shared styles
-${designSystemLine}
-Compare against the existing spec at ${existingSpec || '[path to existing spec]'}. Identify only NEW and MODIFIED elements.
-
-Output a structured codebase analysis document.`.trim();
-
-  const buildBrownfieldPrompt2 = (projectName, keyScreens, whatsNew) =>
-`Using the codebase analysis of ${projectName}, extract every design decision:
-1. Layout patterns: grid systems, responsive behavior, page structure
-2. Component states: all states each component handles (default, hover, active, disabled, error, loading)
-3. Interaction patterns: forms, modals, navigation, real-time updates, gestures
-4. Visual design: colors, typography, spacing, iconography choices
-5. Data display: formatting rules, units, precision, empty/error states
-6. Error handling: validation logic, error messages, recovery flows
-7. Accessibility: ARIA usage, keyboard navigation, contrast ratios, screen reader support
-
-For each decision, document:
-- The decision made
-- The rationale (why this approach vs alternatives)
-- The code file and line range where it's implemented
-
-Focus on changes only. For modified components, document BEFORE and AFTER behavior. Changes: ${whatsNew || '[describe what changed]'}
-
-Focus on: ${keyScreens}`;
-
-  const buildBrownfieldPrompt3 = (projectName, existingSpec) =>
-`Generate a Design Specification Addendum for ${projectName} following this structure:
-
-1. Document Header (version, date, scope, regulatory refs: FDA 21 CFR 820.30, IEC 62304, IEC 62366)
-2. Change Summary (overview of all modifications and additions)
-3. Delta: Screen Inventory (new/modified screens only: name, purpose, navigation path)
-4. Delta: Component Specification (new/modified components: visual description, all states, behavior, accessibility)
-5. Delta: Layout & Visual Design (changes to grid, spacing, typography, color, responsive breakpoints)
-6. Delta: Interaction Design (new/modified user flows, transitions, error states, loading, edge cases)
-7. Delta: Data Display (new/modified data-to-UI mapping, formatting, empty/error states)
-8. Design Rationale (why each change was made, alternatives considered, traces to user needs)
-9. Design System Alignment (new tokens used, new patterns, deviations justified)
-10. Accessibility (WCAG compliance for new/modified elements)
-11. Impact Assessment (how changes affect existing functionality, regression considerations)
-12. Delta Traceability Matrix (user needs \u2192 design inputs \u2192 spec sections \u2192 code files, changes only)
-
-Reference parent spec: ${existingSpec || '[path to existing spec]'}
-
-Requirements:
-- Reference specific code files for every new/modified component and screen
-- Include ALL component states from the extraction
-- Document every new/modified user flow with error paths
-- Use formal regulatory language suitable for a Design History File
-- The traceability matrix must link to actual code file paths
-- Clearly distinguish NEW vs MODIFIED elements throughout
-
-Output as a single Markdown document ready for review.`;
+  };
 
 
   // -- Update Mode Prompt Templates --
@@ -503,8 +462,10 @@ Instructions:
    - Lines added/removed count
    - Functional description of what changed
    - Which section(s) of the existing spec are affected
-4. Identify any NEW screens, components, or user flows not in the existing spec
-5. Identify any REMOVED elements that should be removed from the spec
+4. Identify which acceptance criteria from the existing spec are affected by the changes
+5. Flag any new states, flows, or data rules that need new acceptance criteria
+6. Identify any NEW screens, components, or user flows not in the existing spec
+7. Identify any REMOVED elements that should be removed from the spec
 
 Output a structured diff analysis document organized by spec section impact.`.trim();
 
@@ -522,20 +483,28 @@ For each spec section affected by the code changes:
 
 Then generate:
 
-A. **New Changelog Entry:**
+A. **Verification Impact:**
+   For each changed acceptance criterion, show previous vs. updated.
+   List new acceptance criteria needed for new states/flows/data rules.
+
+B. **Updated Verification Summary (\u00a712):**
+   Update the component, flow, and data verification checklists.
+
+C. **New Changelog Entry:**
    | Version | Date | Author | Git Ref | Summary |
    Add an entry covering the commit range ${verifiedSha || '[SHA]'}..${currentRef || 'HEAD'}
 
-B. **Updated Verification Header:**
+D. **Updated Verification Header:**
    Set status to STALE with a note: "Code changed since last verification. Design re-review recommended."
 
-C. **Re-Verification Recommendation:**
+E. **Re-Verification Recommendation:**
    List each affected section with:
    - What changed
    - Priority for design re-review (High/Medium/Low)
    - Whether the change is cosmetic, behavioral, or structural
+   - Rate regression risk per affected flow
 
-D. **Impact Assessment:**
+F. **Impact Assessment:**
    - Affected user flows
    - Regression risk per change
    - Traceability impact (any user needs affected?)

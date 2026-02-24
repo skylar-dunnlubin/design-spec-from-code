@@ -107,7 +107,7 @@
             </div>
             <div class="exec-block">
               <h3 class="exec-block-title">The Solution</h3>
-              <p><strong>Extract formal design specifications directly from the working codebase</strong> at each delivery milestone. The spec is <strong>always accurate because it describes what was actually built</strong>. A multi-pass workflow produces <strong>recoverable artifacts at every stage</strong> &mdash; key screens, usability prototype + preliminary spec, final implementation + final spec.</p>
+              <p><strong>Extract formal design specifications directly from the working codebase</strong> at each delivery milestone. The spec is <strong>always accurate because it describes what was actually built</strong>. A multi-pass workflow produces <strong>recoverable artifacts at every stage</strong> &mdash; key screens, usability prototype + preliminary spec, final implementation + final spec. Each spec includes structured acceptance criteria &mdash; making it usable not just as documentation, but as a <strong>verification oracle</strong> for confirming the production code matches the intended design.</p>
             </div>
           </div>
 
@@ -144,7 +144,7 @@
                 </div>
               </div>
             </div>
-            <div class="exec-flow-note">Artifacts are produced concurrently across roles &mdash; not in sequential lockstep.</div>
+            <div class="exec-flow-note">Artifacts are produced concurrently across roles &mdash; not in sequential lockstep. The workflow produces both a <strong>product architecture overview</strong> and <strong>per-feature specs</strong> with built-in verification criteria.</div>
           </div>
 
           <!-- Value Props -->
@@ -676,7 +676,7 @@
         <div class="section-header">
           <span class="section-number">06</span>
           <h2 class="section-title">The Methodology</h2>
-          <p class="section-subtitle">Seven steps from code to audit-ready design specification &mdash; including ongoing maintenance.</p>
+          <p class="section-subtitle">Seven steps from code to audit-ready, verification-ready design specification &mdash; including ongoing maintenance.</p>
         </div>
         <div class="section-content">
 
@@ -712,7 +712,7 @@
               <div class="method-step-number">4</div>
               <div class="method-step-content">
                 <h3>Generate the Specification</h3>
-                <p>Claude Code outputs a structured design specification document following the template (see <a href="#spec-contents">Section 08</a>). The spec includes all 11 required sections: from document header through traceability matrix. Each section references specific code files and components.</p>
+                <p>Claude Code outputs a structured design specification document following the template (see <a href="#spec-contents">Section 08</a>). The spec includes all 12 required sections: from document header through verification summary. Each section references specific code files and components, with acceptance criteria built into every component and flow.</p>
                 <div class="method-tag">Structured document ready for review</div>
               </div>
             </div>
@@ -732,6 +732,14 @@
                 <h3>Lock Traceability</h3>
                 <p>The approved spec is version-controlled alongside the code. Code files reference the spec version. The spec references specific code files and line ranges. The traceability chain is complete: user needs &rarr; design inputs &rarr; design spec &rarr; code. The DHF entry is documented.</p>
                 <div class="method-tag">Traceability chain complete &mdash; DHF is audit-ready</div>
+                <div class="callout callout--insight" style="margin-top: var(--space-4);">
+                  <div class="callout-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  </div>
+                  <div class="callout-content">
+                    <strong>The spec is now a verification artifact.</strong> Any team member &mdash; designer, engineer, QA, or AI &mdash; can read the spec's acceptance criteria (&sect;4, &sect;6, &sect;7) and verification summary (&sect;12) to systematically verify the production code meets every requirement.
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -739,8 +747,13 @@
               <div class="method-step-number">7</div>
               <div class="method-step-content">
                 <h3>Maintain the Spec</h3>
-                <p>When code changes after verification &mdash; by anyone, design or engineering &mdash; the spec must stay current. Run the <strong>Update prompt</strong> to generate a delta. Review the delta against design intent. If the change is design-approved: update the spec, add a changelog entry, re-verify. If unauthorized: flag for discussion, and the spec stays <strong>STALE</strong> until resolved.</p>
-                <div class="method-tag">Living process &mdash; spec stays accurate post-handoff</div>
+                <p>The spec is a living document. Three scenarios trigger maintenance:</p>
+                <ul style="color: var(--text-on-dark-muted); font-size: var(--text-sm); margin: var(--space-3) 0; padding-left: 1.5em;">
+                  <li><strong style="color: var(--text-on-dark);">Code changes an existing feature</strong> &mdash; Run the Update prompt &rarr; delta + changelog + STALE status. Designer re-reviews. If approved: re-verify. If unauthorized: flag for discussion.</li>
+                  <li><strong style="color: var(--text-on-dark);">New feature added to product</strong> &mdash; Run Extract for new feature &rarr; new spec. Update architecture doc (add to Feature Inventory). Run Update on impacted existing specs.</li>
+                  <li><strong style="color: var(--text-on-dark);">Feature removed</strong> &mdash; Update architecture doc (remove from inventory). Archive the feature spec. Changelog entry documenting removal.</li>
+                </ul>
+                <div class="method-tag">Living process &mdash; Extract + Update cover every scenario</div>
               </div>
             </div>
           </div>
@@ -995,6 +1008,82 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
             </div>
           </div>
 
+          <!-- Spec Lifecycle -->
+          <h3 class="governance-heading">Spec Lifecycle: From First Extract to Ongoing Maintenance</h3>
+          <p class="governance-intro">Two operations &mdash; <strong>Extract</strong> and <strong>Update</strong> &mdash; cover every lifecycle scenario. No separate templates for greenfield vs. brownfield.</p>
+
+          <div class="lifecycle-scenarios">
+            <div class="lifecycle-card">
+              <div class="lifecycle-card-header">
+                <span class="lifecycle-badge lifecycle-badge--extract">Extract</span>
+                <h4>Initial extraction</h4>
+              </div>
+              <p>Run the Extract prompt against the codebase + design brief. Produces a <code>product-architecture.md</code> and individual per-feature specs. Each spec includes acceptance criteria and a Verification Summary from day one.</p>
+            </div>
+
+            <div class="lifecycle-card">
+              <div class="lifecycle-card-header">
+                <span class="lifecycle-badge lifecycle-badge--update">Update</span>
+                <h4>Feature evolution</h4>
+              </div>
+              <p>Code changes after verification &rarr; run the Update prompt &rarr; produces a delta + changelog + STALE status. Designer re-reviews affected sections. After approval, status returns to VERIFIED.</p>
+            </div>
+
+            <div class="lifecycle-card">
+              <div class="lifecycle-card-header">
+                <span class="lifecycle-badge lifecycle-badge--extract">Extract</span>
+                <span class="lifecycle-badge lifecycle-badge--update">Update</span>
+                <h4>New feature added</h4>
+              </div>
+              <p>Run Extract for the new feature &rarr; new spec file. Add to architecture doc. Run Update on any existing specs impacted by the new feature. All three artifacts versioned together.</p>
+            </div>
+
+            <div class="lifecycle-card">
+              <div class="lifecycle-card-header">
+                <span class="lifecycle-badge lifecycle-badge--update">Update</span>
+                <h4>Feature removed</h4>
+              </div>
+              <p>Update architecture doc (remove from Feature Inventory). Archive the feature spec. Add a changelog entry documenting the removal and rationale.</p>
+            </div>
+          </div>
+
+          <!-- Lifecycle Diagram -->
+          <div class="lifecycle-diagram">
+            <div class="lifecycle-diagram-title">Spec Lifecycle Flow</div>
+            <div class="lifecycle-flow">
+              <div class="lifecycle-flow-step">
+                <span class="lifecycle-badge lifecycle-badge--extract">Extract</span>
+                <span class="lifecycle-flow-arrow">&rarr;</span>
+                <span class="lifecycle-flow-artifact">feature-spec.md <strong>(VERIFIED)</strong></span>
+              </div>
+              <div class="lifecycle-flow-connector">&darr; <span>code changes</span></div>
+              <div class="lifecycle-flow-step">
+                <span class="lifecycle-badge lifecycle-badge--update">Update</span>
+                <span class="lifecycle-flow-arrow">&rarr;</span>
+                <span class="lifecycle-flow-artifact">feature-spec.md v1.1 <strong>(STALE &rarr; RE-VERIFIED)</strong></span>
+              </div>
+              <div class="lifecycle-flow-connector">&darr; <span>new feature added</span></div>
+              <div class="lifecycle-flow-step">
+                <span class="lifecycle-badge lifecycle-badge--extract">Extract</span>
+                <span class="lifecycle-flow-arrow">&rarr;</span>
+                <span class="lifecycle-flow-artifact">new-feature.md</span>
+                <span class="lifecycle-flow-plus">+</span>
+                <span class="lifecycle-badge lifecycle-badge--update">Update</span>
+                <span class="lifecycle-flow-arrow">&rarr;</span>
+                <span class="lifecycle-flow-artifact">affected-specs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout--insight">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div class="callout-content">
+              <strong>Why per-feature files?</strong> Verification is per-feature &mdash; AI or human can verify one spec against its code. STALE status is immediately visible per feature without tainting the whole product. PR review is scoped to the affected spec. Maps naturally to Jira epics.
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
@@ -1007,7 +1096,7 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
         <div class="section-header">
           <span class="section-number">08</span>
           <h2 class="section-title">What Goes in the Design Spec</h2>
-          <p class="section-subtitle">The 11 sections that make a design specification audit-ready &mdash; and why each matters for traceability.</p>
+          <p class="section-subtitle">The 12 sections that make a design specification audit-ready and verification-ready &mdash; and why each matters.</p>
         </div>
         <div class="section-content">
 
@@ -1082,11 +1171,18 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
               <div class="spec-why"><strong>Why:</strong> IEC 62366 usability requirements. Accessibility is a design output that must be documented.</div>
             </div>
 
-            <div class="spec-section-card spec-section-card--highlight">
+            <div class="spec-section-card">
               <div class="spec-section-num">11</div>
               <h3>Traceability Matrix</h3>
               <p>A table mapping: user needs &rarr; design input references &rarr; spec section numbers &rarr; code file paths and component names. This is the auditor's roadmap.</p>
               <div class="spec-why"><strong>Why:</strong> The single artifact that proves end-to-end traceability. Auditors start here.</div>
+            </div>
+
+            <div class="spec-section-card spec-section-card--highlight">
+              <div class="spec-section-num">12</div>
+              <h3>Verification Summary</h3>
+              <p>Consolidated pass/fail checklists: component states to verify, flow entry/exit and error paths, data validation rules and boundary tests, traceability verification status. The test oracle for the entire feature.</p>
+              <div class="spec-why"><strong>Why:</strong> Makes the spec usable as a verification oracle. A human or AI can read this section and systematically determine whether the code is correct.</div>
             </div>
           </div>
 
@@ -1277,9 +1373,8 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 
           <div id="prompt-form" class="prompt-form">
             <div class="prompt-toggle">
-              <button class="toggle-btn active" data-mode="greenfield">New Product (Greenfield)</button>
-              <button class="toggle-btn" data-mode="brownfield">Feature Addition (Brownfield)</button>
-              <button class="toggle-btn" data-mode="update">Spec Update (Delta)</button>
+              <button class="toggle-btn active" data-mode="extract">Extract (New Spec)</button>
+              <button class="toggle-btn" data-mode="update">Update (Delta)</button>
             </div>
 
             <div class="prompt-fields">
@@ -1316,22 +1411,22 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
                 <input type="text" id="design-system" class="field-input" placeholder="Path to design system file or URL">
               </div>
 
-              <!-- Brownfield-only fields -->
-              <div class="brownfield-fields hidden">
+              <!-- Extract-mode optional fields (for adding to existing product) -->
+              <div class="extract-fields">
                 <div class="field-group">
-                  <label for="existing-spec" class="field-label">Existing Spec Path</label>
-                  <input type="text" id="existing-spec" class="field-input" placeholder="Path to existing design specification">
+                  <label for="existing-spec" class="field-label">Existing Spec Path <span class="field-optional">(if updating an existing product)</span></label>
+                  <input type="text" id="existing-spec" class="field-input" placeholder="Path to existing architecture doc or spec (leave blank for new product)">
                 </div>
                 <div class="field-group">
-                  <label for="whats-new" class="field-label">What Changed / What's New</label>
-                  <textarea id="whats-new" class="field-input field-textarea" placeholder="Describe the new features or changes added to the existing product..." rows="3"></textarea>
+                  <label for="whats-new" class="field-label">What's New <span class="field-optional">(if adding features to existing product)</span></label>
+                  <textarea id="whats-new" class="field-input field-textarea" placeholder="Describe the new features being added (leave blank for new product)..." rows="3"></textarea>
                 </div>
               </div>
 
               <!-- Update-only fields -->
               <div class="update-fields hidden">
                 <div class="field-group">
-                  <label for="update-spec-path" class="field-label">Previous Spec Version Path</label>
+                  <label for="update-spec-path" class="field-label">Spec Being Updated</label>
                   <input type="text" id="update-spec-path" class="field-input" placeholder="Path to the spec being updated (e.g., design-specs/patient-detail.md)">
                 </div>
                 <div class="field-group">
@@ -1393,23 +1488,106 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
         <div class="section-header">
           <span class="section-number">12</span>
           <h2 class="section-title">Templates</h2>
-          <p class="section-subtitle">Copyable design specification scaffolds &mdash; ready to fill with Claude Code's output.</p>
+          <p class="section-subtitle">Copyable specification scaffolds &mdash; an architecture overview plus per-feature specs, each with built-in verification criteria.</p>
         </div>
         <div class="section-content">
 
           <div class="template-tabs">
-            <button class="template-tab active" data-template="greenfield">Greenfield (New Product)</button>
-            <button class="template-tab" data-template="brownfield">Brownfield (Feature Addition)</button>
-            <button class="template-tab" data-template="update">Update (Delta)</button>
+            <button class="template-tab active" data-template="architecture">Product Architecture</button>
+            <button class="template-tab" data-template="extract">Feature Spec (Extract)</button>
+            <button class="template-tab" data-template="update">Spec Update (Delta)</button>
           </div>
 
-          <div id="template-greenfield" class="template-content active">
+          <div id="template-architecture" class="template-content active">
             <div class="template-block">
               <div class="template-block-header">
-                <span class="template-block-label">Greenfield Design Specification Template</span>
-                <button class="copy-btn" data-target="greenfield-template-code">Copy Template</button>
+                <span class="template-block-label">Product Architecture Template</span>
+                <button class="copy-btn" data-target="architecture-template-code">Copy Template</button>
               </div>
-              <pre id="greenfield-template-code" class="template-block-content"><code># Design Specification: [Feature/Product Name]
+              <pre id="architecture-template-code" class="template-block-content"><code># Product Architecture: [Product Name]
+# Version: 1.0 | Date: [YYYY-MM-DD] | Author: [Name]
+# Regulatory: FDA 21 CFR 820.30, IEC 62304, IEC 62366
+
+## Product Overview
+
+- **Product name:** [Name]
+- **Purpose:** [What this product does and who it serves]
+- **Target users:** [Primary and secondary user roles]
+- **Tech stack:** [Framework, language, platform]
+- **Regulatory scope:** [Which standards apply and classification]
+
+---
+
+## Feature Inventory
+
+| Feature | Spec File | Status | Verified At | Verification Status |
+|---------|-----------|--------|-------------|---------------------|
+| [Feature A] | design-specs/feature-a.md | Active | [Merge SHA] | VERIFIED |
+| [Feature B] | design-specs/feature-b.md | Active | [Merge SHA] | STALE |
+| [Feature C] | design-specs/feature-c.md | Planned | &mdash; | &mdash; |
+
+---
+
+## Shared Components
+
+| Component | Used By (Features) | Code Path | Design System Token |
+|-----------|-------------------|-----------|---------------------|
+| [Button] | [Feature A, Feature B] | src/components/Button.tsx | button-primary |
+| [Card] | [Feature A, Feature C] | src/components/Card.tsx | card-surface |
+| [Modal] | [Feature B] | src/components/Modal.tsx | modal-overlay |
+
+---
+
+## Navigation Map
+
+### Screen-to-Screen Flow
+[Describe or diagram how features connect through navigation]
+
+| From Screen | To Screen | Trigger | Feature |
+|------------|-----------|---------|---------|
+| [Dashboard] | [Patient Detail] | Row click | Feature A |
+| [Patient Detail] | [Alert History] | Tab switch | Feature B |
+
+---
+
+## Cross-Feature Data Flows
+
+| Producer | Data | Consumer | Contract |
+|----------|------|----------|----------|
+| [Feature A] | [Patient record] | [Feature B] | [JSON schema / API endpoint] |
+| [Feature B] | [Alert events] | [Feature C] | [WebSocket channel] |
+
+---
+
+## Product-Level Traceability
+
+| User Need | Features Addressing | Design Inputs |
+|-----------|-------------------|---------------|
+| UN-001 | [Feature A, Feature C] | DI-001, DI-003 |
+| UN-002 | [Feature B] | DI-002 |
+| UN-003 | [Feature A, Feature B] | DI-004, DI-005 |
+
+---
+
+## Revision History
+
+| Version | Date | Author | Summary |
+|---------|------|--------|---------|
+| 1.0 | [Date] | [Author] | Initial architecture document |
+
+&gt; **Usage:** This document is the index for all feature specs. When a new feature
+&gt; is added, run Extract to create its spec, then add a row to the Feature Inventory.
+&gt; When a feature changes, run Update on its spec and update the Verification Status here.</code></pre>
+            </div>
+          </div>
+
+          <div id="template-extract" class="template-content">
+            <div class="template-block">
+              <div class="template-block-header">
+                <span class="template-block-label">Feature Spec (Extract) Template</span>
+                <button class="copy-btn" data-target="extract-template-code">Copy Template</button>
+              </div>
+              <pre id="extract-template-code" class="template-block-content"><code># Design Specification: [Feature Name]
 # Version: 1.0 | Date: [YYYY-MM-DD] | Author: [Name]
 # Regulatory: FDA 21 CFR 820.30, IEC 62304, IEC 62366
 
@@ -1480,16 +1658,22 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 - **Location:** [Which screens use this component]
 - **Code path:** `[src/components/ComponentName.tsx]`
 
-| State | Visual Description | Behavior |
-|-------|-------------------|----------|
-| Default | [Description] | [Behavior] |
-| Hover | [Description] | [Behavior] |
-| Active/Pressed | [Description] | [Behavior] |
-| Disabled | [Description] | [Behavior] |
-| Error | [Description] | [Behavior] |
-| Loading | [Description] | [Behavior] |
+| State | Visual | Behavior | Acceptance Criteria |
+|-------|--------|----------|---------------------|
+| Default | [Description] | [Behavior] | When [precondition] &rarr; [expected outcome] |
+| Hover | [Description] | [Behavior] | When cursor enters &rarr; [exact visual change] |
+| Active | [Description] | [Behavior] | When clicked &rarr; [exact result + timing] |
+| Disabled | [Description] | [Behavior] | When [condition] &rarr; non-interactive + [visual] |
+| Error | [Description] | [Behavior] | When [trigger] &rarr; [error display + recovery] |
+| Loading | [Description] | [Behavior] | When [trigger] &rarr; [skeleton/spinner + duration] |
 
-**Accessibility:** [ARIA labels, role, keyboard behavior]
+**Data Contract:**
+| Prop/Input | Type | Valid Range | Null Handling | Error State |
+|-----------|------|-------------|---------------|-------------|
+| [prop] | [type] | [min-max] | [behavior] | [what shows] |
+
+**Accessibility Assertions:**
+- [WCAG ref]: assert [specific check]
 
 ---
 
@@ -1524,31 +1708,33 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 
 ## 6. Interaction Design
 
-### User Flows
-#### Flow: [Flow Name]
-1. User [action] &rarr; System [response]
-2. User [action] &rarr; System [response]
-3. [Continue flow...]
+### Flow: [Flow Name]
+| Step | Precondition | User Action | System Response | Postcondition |
+|------|-------------|-------------|-----------------|---------------|
+| 1 | [state] | [action] | [response] | [new state] |
+| 2 | [state] | [action] | [response] | [new state] |
 
-**Error path:** [What happens when something goes wrong]
-**Edge case:** [Notable edge cases handled]
+**Entry conditions:** [What must be true to enter this flow]
+**Exit conditions:** [What triggers exit + cleanup]
+**Error path:** [Trigger] &rarr; [Error state] &rarr; [Recovery action] &rarr; [Success criteria]
+
+**Edge cases:**
+| Case | Input | Expected Behavior |
+|------|-------|-------------------|
+| [edge case] | [input] | [expected result] |
 
 ### Transitions
 | From | To | Trigger | Animation |
 |------|-----|---------|-----------|
 | [State A] | [State B] | [User action] | [Transition description] |
 
-### Loading States
-- [How loading is indicated per screen/component]
-
 ---
 
 ## 7. Data Display
 
-### [Data Element Name]
-| Field | Format | Example | Empty State | Error State |
-|-------|--------|---------|-------------|-------------|
-| [field] | [format rule] | [example] | [what shows when empty] | [what shows on error] |
+| Field | Format Rule | Example | Valid Range | Edge Case Handling |
+|-------|------------|---------|-------------|-------------------|
+| [field] | [rule] | [example] | [min-max/regex] | [null/overflow/error] |
 
 ### Real-time Updates
 - [How data freshness is indicated]
@@ -1563,9 +1749,6 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 - **Alternatives considered:** [What else was evaluated]
 - **Rationale:** [Why this choice was made]
 - **Traces to:** DI-001 (user need for quick scanning)
-
-### [Decision 2]
-[Same format...]
 
 ---
 
@@ -1587,13 +1770,13 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 
 ## 10. Accessibility
 
-| Requirement | Implementation | WCAG Level |
-|------------|----------------|------------|
-| Color contrast | [Ratio achieved] | AA / AAA |
-| Keyboard navigation | [Tab order description] | A |
-| Screen reader | [ARIA implementation] | A |
-| Touch targets | [Minimum size] | AA |
-| Reduced motion | [prefers-reduced-motion handling] | AAA |
+| Requirement | Implementation | WCAG | Automated Test |
+|------------|----------------|------|----------------|
+| Contrast | [Ratio achieved] | 1.4.3 AA | assert(contrastRatio &gt;= 4.5) |
+| Keyboard | [Tab order description] | 2.1.1 A | assert(focusOrder matches spec) |
+| Screen reader | [ARIA implementation] | 4.1.2 A | assert(accessibleName defined) |
+| Touch targets | [Minimum size] | 2.5.5 AAA | assert(targetSize &gt;= 44px) |
+| Reduced motion | [prefers-reduced-motion] | 2.3.3 AAA | assert(animation disabled) |
 
 ---
 
@@ -1606,151 +1789,32 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 
 ---
 
-## Revision History &amp; Changelog
+## 12. Verification Summary
 
-| Version | Date | Author | Git Ref | Summary |
-|---------|------|--------|---------|---------|
-| 1.0 | [Date] | [Author] | [SHA] | Initial specification extracted from codebase |
+### How to Verify This Feature
+This section provides structured criteria for verifying the implementation
+matches the design specification. Use for manual review, automated testing,
+or AI-assisted verification.
 
-&gt; **Note:** This spec should be modular. For multi-feature products, create per-feature
-&gt; sub-specs (e.g., `design-specs/patient-detail.md`) with an index file linking them.
-&gt; Each sub-spec carries its own verification header and changelog.</code></pre>
-            </div>
-          </div>
+### Component Verification Checklist
+| Component | States to Verify | Critical Assertions | Code Path |
+|-----------|-----------------|---------------------|-----------|
+| [Component] | [list states] | [key pass/fail criteria] | [file:line] |
 
-          <div id="template-brownfield" class="template-content">
-            <div class="template-block">
-              <div class="template-block-header">
-                <span class="template-block-label">Brownfield Design Specification Template (Feature Addition)</span>
-                <button class="copy-btn" data-target="brownfield-template-code">Copy Template</button>
-              </div>
-              <pre id="brownfield-template-code" class="template-block-content"><code># Design Specification Addendum: [Feature Name]
-# Parent Spec: DS-[PROJECT]-[BASE]-[VERSION]
-# Version: 1.0 | Date: [YYYY-MM-DD] | Author: [Name]
-# Regulatory: FDA 21 CFR 820.30, IEC 62304, IEC 62366
+### Flow Verification Checklist
+| Flow | Steps | Entry/Exit | Error Paths | Regression Risk |
+|------|-------|-----------|-------------|-----------------|
+| [Flow] | [count] | [documented?] | [count] | High/Med/Low |
 
-## Verification Status
+### Data Verification Rules
+| Data Element | Validation Rule | Boundary Test | Expected Error |
+|-------------|----------------|---------------|----------------|
+| [element] | [rule] | [boundary input] | [expected handling] |
 
-| Field | Value |
-|-------|-------|
-| Verified by | [Designer Name] |
-| Verified at | [Merge commit SHA on main] |
-| Verification date | [YYYY-MM-DD] |
-| Status | VERIFIED |
-
----
-
-## 1. Document Header
-
-| Field | Value |
-|-------|-------|
-| Document ID | DS-[PROJECT]-[FEATURE]-001 |
-| Parent Specification | [Reference to existing design spec] |
-| Version | 1.0 |
-| Date | [YYYY-MM-DD] |
-| Author | [Your name] |
-| Change Type | Feature Addition / Enhancement / Modification |
-| Feature Scope | [What this addendum covers] |
-
----
-
-## 2. Change Summary
-
-### What's New
-[High-level description of the new feature/changes]
-
-### What's Modified
-| Existing Component | Change Description | Reason |
-|-------------------|-------------------|---------|
-| [Component] | [What changed] | [Why] |
-
-### What's Unchanged
-[Reference to parent spec sections that remain valid]
-
----
-
-## 3. Design Intent (Delta)
-
-### New User Needs Addressed
-| User Need ID | Description | Source |
-|-------------|-------------|--------|
-| UN-XXX | [New user need] | [Reference] |
-
-### New Design Inputs
-| Design Input ID | Description | Traces to |
-|----------------|-------------|-----------|
-| DI-XXX | [New design input] | UN-XXX |
-
----
-
-## 4. New Screens
-
-| Screen Name | Purpose | Navigation Path | Relationship to Existing |
-|------------|---------|-----------------|-------------------------|
-| [New screen] | [Purpose] | [Path] | [How it connects to existing screens] |
-
----
-
-## 5. New / Modified Components
-
-### [New Component Name]
-[Full component spec — same format as greenfield &sect;4]
-
-### [Modified Component Name]
-- **Previous behavior:** [What it did before]
-- **New behavior:** [What it does now]
-- **Reason for change:** [Why]
-- **Impact on existing flows:** [What existing functionality is affected]
-
----
-
-## 6. New Interactions &amp; Flows
-
-### Flow: [New Flow Name]
-[Full flow spec — same format as greenfield &sect;6]
-
-### Modified Flows
-| Original Flow | Change | Impact |
-|--------------|--------|--------|
-| [Flow name] | [What changed] | [Impact on user experience] |
-
----
-
-## 7. New Data Display Rules
-
-[Same format as greenfield &sect;7 — only for new/changed data]
-
----
-
-## 8. Design Rationale (Delta)
-
-### [Decision: Why this feature was added]
-- **Context:** [What prompted this addition]
-- **Choice:** [Design approach taken]
-- **Alternatives:** [What else was considered]
-- **Traces to:** DI-XXX
-
----
-
-## 9. Delta Traceability Matrix
-
-| User Need | Design Input | Spec Section | Code File | Change Type |
-|-----------|-------------|--------------|-----------|-------------|
-| UN-XXX | DI-XXX | &sect;5 NewComponent | src/new/File.tsx | NEW |
-| UN-001 | DI-001 | &sect;5 ModifiedComp | src/existing/File.tsx | MODIFIED |
-
----
-
-## 10. Impact Assessment
-
-### Risk Analysis
-| Change | Risk | Mitigation |
-|--------|------|------------|
-| [Change description] | [Potential risk] | [How mitigated] |
-
-### Regression Considerations
-- [What existing functionality could be affected]
-- [Testing required to verify no regression]
+### Traceability Verification
+| User Need | Design Input | Spec Section | Code File | Verified? |
+|-----------|-------------|-------------|-----------|-----------|
+| UN-001 | DI-001 | &sect;4 [Component] | src/path | &marker; |
 
 ---
 
@@ -1758,14 +1822,14 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 
 | Version | Date | Author | Git Ref | Summary |
 |---------|------|--------|---------|---------|
-| 1.0 | [Date] | [Author] | [SHA] | Initial feature addition spec extracted from codebase |</code></pre>
+| 1.0 | [Date] | [Author] | [SHA] | Initial specification extracted from codebase |</code></pre>
             </div>
           </div>
 
           <div id="template-update" class="template-content">
             <div class="template-block">
               <div class="template-block-header">
-                <span class="template-block-label">Update / Change Template (Delta Mode)</span>
+                <span class="template-block-label">Spec Update (Delta) Template</span>
                 <button class="copy-btn" data-target="update-template-code">Copy Template</button>
               </div>
               <pre id="update-template-code" class="template-block-content"><code># Spec Update: [Feature Name]
@@ -1811,11 +1875,30 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 [New spec content for this section]
 
 #### Rationale for Change
-[Why this section changed — traces to design input or engineering requirement]
+[Why this section changed &mdash; traces to design input or engineering requirement]
 
 ---
 
-## 3. New Changelog Entry
+## 3. Verification Impact
+
+### Acceptance Criteria Changed
+| Component/Flow | Previous Criteria | Updated Criteria | Re-verify? |
+|---------------|------------------|-----------------|------------|
+| [Component] | [old assertion] | [new assertion] | Yes / No |
+
+### New Acceptance Criteria
+| Component/Flow | New Criteria | Rationale |
+|---------------|-------------|-----------|
+| [New/changed element] | When [precondition] &rarr; [expected outcome] | [Why added] |
+
+### Updated Verification Summary Entries
+| Checklist Item | Previous | Updated | Regression Risk |
+|---------------|----------|---------|-----------------|
+| [Component/Flow] | [old pass/fail] | [new pass/fail] | High / Med / Low |
+
+---
+
+## 4. New Changelog Entry
 
 | Version | Date | Author | Git Ref | Summary |
 |---------|------|--------|---------|---------|
@@ -1823,19 +1906,19 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
 
 ---
 
-## 4. Re-Verification Recommendation
+## 5. Re-Verification Recommendation
 
 ### Sections Requiring Design Re-Review
-| Section | Reason | Priority |
-|---------|--------|----------|
-| [Section N] | [Why re-review needed] | High / Medium / Low |
+| Section | Reason | Priority | Change Type |
+|---------|--------|----------|-------------|
+| [Section N] | [Why re-review needed] | High / Med / Low | Cosmetic / Behavioral / Structural |
 
 ### Sections Unchanged (No Re-Review Needed)
 [List sections that were not affected by the code changes]
 
 ---
 
-## 5. Impact Assessment
+## 6. Impact Assessment
 
 ### Affected User Flows
 | Flow | Impact | Regression Risk |
@@ -1866,8 +1949,8 @@ Status:         VERIFIED | STALE (code changed since verification)</code></pre>
         <div class="section-content">
 
           <div class="example-tabs">
-            <button class="example-tab active" data-example="admin-hub">Admin Hub (Greenfield)</button>
-            <button class="example-tab" data-example="mobile-hub">Mobile Hub (Brownfield)</button>
+            <button class="example-tab active" data-example="admin-hub">Admin Hub (New Product)</button>
+            <button class="example-tab" data-example="mobile-hub">Mobile Hub (Feature Addition)</button>
           </div>
 
           <div id="example-admin-hub" class="example-content active">
