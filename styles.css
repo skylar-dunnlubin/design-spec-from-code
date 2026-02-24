@@ -3205,7 +3205,7 @@ select.field-input option {
   border-radius: var(--radius-sm);
 }
 
-.safeguard-item strong {
+.safeguard-item > strong {
   font-family: var(--font-heading);
   font-size: var(--text-sm);
   font-weight: 700;
