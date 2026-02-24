@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Specification from Code — Agentic DHF Traceability</title>
+  <meta name="description" content="How to generate audit-ready design specifications from an agentic-coded codebase for medical device Design History File traceability.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================================ -->
+  <!-- STICKY NAV                                   -->
+  <!-- ============================================ -->
+  <nav id="sticky-nav" class="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">DS<span class="nav-logo-accent">from</span>Code</a>
+      <div class="nav-links">
+        <a href="#exec-summary" class="nav-link" data-section="exec-summary">Summary</a>
+        <a href="#problem" class="nav-link" data-section="problem">Problem</a>
+        <a href="#hypothesis" class="nav-link" data-section="hypothesis">Hypothesis</a>
+        <a href="#regulatory" class="nav-link" data-section="regulatory">Regulatory</a>
+        <a href="#risk" class="nav-link" data-section="risk">Objections</a>
+        <a href="#methodology" class="nav-link" data-section="methodology">Method</a>
+        <a href="#governance" class="nav-link" data-section="governance">Governance</a>
+        <a href="#spec-contents" class="nav-link" data-section="spec-contents">Spec Contents</a>
+        <a href="#for-developers" class="nav-link" data-section="for-developers">Developers</a>
+        <a href="#for-designers" class="nav-link" data-section="for-designers">Designers</a>
+        <a href="#prompt-builder" class="nav-link" data-section="prompt-builder">Prompt Builder</a>
+        <a href="#templates" class="nav-link" data-section="templates">Templates</a>
+        <a href="#examples" class="nav-link" data-section="examples">Examples</a>
+      </div>
+      <button class="nav-menu-btn" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============================================ -->
+    <!-- 01 — HERO                                    -->
+    <!-- ============================================ -->
+    <section id="hero" class="section section--hero">
+      <div class="hero-grid-bg"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">Medical Device DHF Traceability</div>
+          <h1 class="hero-title">
+            Design Specification<br>
+            <span class="hero-title-accent">from Code</span>
+          </h1>
+          <p class="hero-subtitle">
+            How to generate audit-ready design specifications from an agentic-coded codebase using Claude Code &mdash; closing the traceability gap between what you built and what your Design History File requires.
+          </p>
+          <div class="hero-audience">
+            <span class="audience-tag">For You</span>
+            <span class="audience-tag">QA &amp; Regulatory</span>
+            <span class="audience-tag">Developers</span>
+            <span class="audience-tag">Designers</span>
+            <span class="audience-tag">Leadership</span>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-image-container">
+            <img src="images/hero.jpg" alt="Blueprint emerging from code — luminous schematic materializing from a software interface" class="hero-image" loading="eager">
+            <div class="hero-image-placeholder">
+              <div class="placeholder-code">
+                <span>function PatientDetail()</span>
+                <span>&nbsp;&nbsp;return &lt;VitalsPanel /&gt;</span>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;AlertHistory /&gt;</span>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;ClinicalNotes /&gt;</span>
+              </div>
+              <div class="placeholder-arrow">
+                <svg viewBox="0 0 60 24" fill="none"><path d="M2 12h50m0 0l-8-8m8 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="placeholder-doc">
+                <span>DESIGN SPECIFICATION</span>
+                <span>v1.0 &mdash; Patient Detail</span>
+                <span>Screen Inventory</span>
+                <span>Component Spec</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- EXECUTIVE SUMMARY (no section number)         -->
+    <!-- ============================================ -->
+    <section id="exec-summary" class="section section--light section--exec-summary">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Executive Summary</h2>
+          <p class="section-subtitle">The 30-second overview &mdash; for CTOs, dev leads, designers, and regulatory.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="exec-columns">
+            <div class="exec-block">
+              <h3 class="exec-block-title">The Problem</h3>
+              <p>Traditional spec-first workflows create a <strong>bottleneck</strong> between design and development. In hyperiterative sprints, <strong>specs drift from code within days</strong> &mdash; and in a regulated environment, that drift is a <strong>compliance liability</strong>.</p>
+            </div>
+            <div class="exec-block">
+              <h3 class="exec-block-title">The Solution</h3>
+              <p><strong>Extract formal design specifications directly from the working codebase</strong> at each delivery milestone. The spec is <strong>always accurate because it describes what was actually built</strong>. A multi-pass workflow produces <strong>recoverable artifacts at every stage</strong> &mdash; key screens, usability prototype + preliminary spec, final implementation + final spec.</p>
+            </div>
+          </div>
+
+          <!-- Deliverable Flow Diagram -->
+          <div class="exec-flow">
+            <div class="exec-flow-title">Deliverable Flow</div>
+            <div class="exec-flow-diagram">
+              <div class="exec-flow-lane">
+                <div class="exec-flow-lane-label">Design</div>
+                <div class="exec-flow-items">
+                  <div class="exec-flow-node exec-flow-node--design">Key Screens <span class="exec-flow-sub">(Figma / AI)</span></div>
+                  <div class="exec-flow-arrow">&darr;</div>
+                  <div class="exec-flow-node exec-flow-node--design">Usability Prototype<br>+ Prelim Spec</div>
+                  <div class="exec-flow-arrow">&darr;</div>
+                  <div class="exec-flow-node exec-flow-node--design">Refined Features</div>
+                  <div class="exec-flow-arrow">&darr;</div>
+                  <div class="exec-flow-node exec-flow-node--design exec-flow-node--final">Final Implementation<br>+ Final Spec</div>
+                </div>
+              </div>
+              <div class="exec-flow-lane">
+                <div class="exec-flow-lane-label">Engineering</div>
+                <div class="exec-flow-items">
+                  <div class="exec-flow-node exec-flow-node--eng">Review <span class="exec-flow-sub">(can continue if designer unavailable)</span></div>
+                  <div class="exec-flow-arrow">&darr;</div>
+                  <div class="exec-flow-node exec-flow-node--eng exec-flow-node--final">2-Reviewer PR Gate <span class="exec-flow-sub">(standard process)</span></div>
+                </div>
+              </div>
+              <div class="exec-flow-lane">
+                <div class="exec-flow-lane-label">Quality / DHF</div>
+                <div class="exec-flow-items">
+                  <div class="exec-flow-node exec-flow-node--qa">Prelim spec on file <span class="exec-flow-sub">(recoverable baseline)</span></div>
+                  <div class="exec-flow-arrow">&darr;</div>
+                  <div class="exec-flow-node exec-flow-node--qa exec-flow-node--final">Approved spec &rarr; DHF <span class="exec-flow-sub">(traceability locked)</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="exec-flow-note">Artifacts are produced concurrently across roles &mdash; not in sequential lockstep.</div>
+          </div>
+
+          <!-- Value Props -->
+          <div class="exec-value-grid">
+            <div class="exec-value-card">
+              <div class="exec-value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h4>Zero spec-code drift</h4>
+              <p>Spec is extracted from code, not maintained separately. Accurate by construction.</p>
+            </div>
+            <div class="exec-value-card">
+              <div class="exec-value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h4>Sprint-compatible</h4>
+              <p>No waterfall bottleneck. Build, extract, review within a single sprint cycle.</p>
+            </div>
+            <div class="exec-value-card">
+              <div class="exec-value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+              <h4>Recoverable at every stage</h4>
+              <p>Key screens, prototype + spec, and final code + spec exist as independent artifacts. The project continues from the last milestone.</p>
+            </div>
+            <div class="exec-value-card">
+              <div class="exec-value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <h4>Post-handoff integrity</h4>
+              <p>Every spec carries a changelog and verification status. When code changes after design sign-off, the divergence is visible &mdash; not silent.</p>
+            </div>
+            <div class="exec-value-card">
+              <div class="exec-value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <h4>No new process</h4>
+              <p>Plugs into existing Jira tasks, PR reviews, 2-reviewer gates, and CI pipelines. The spec is now part of the deliverable.</p>
+            </div>
+          </div>
+
+          <!-- Regulatory one-liner -->
+          <div class="callout callout--key">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="callout-content">
+              <strong>Standards require the spec to <em>exist and be traceable</em></strong> &mdash; not that it precedes implementation. This workflow produces a spec that is always current, always traceable, and always version-locked to the code it describes.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 02 — THE PROBLEM                             -->
+    <!-- ============================================ -->
+    <section id="problem" class="section section--light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">02</span>
+          <h2 class="section-title">The Problem</h2>
+          <p class="section-subtitle">Traditional DHF workflows assume design precedes code. Agentic coding inverts that.</p>
+        </div>
+        <div class="section-content">
+          <div class="content-columns">
+            <div class="content-text">
+              <p>Medical device development follows a well-established waterfall for design controls: <strong>User Needs &rarr; Design Inputs &rarr; Design Specification &rarr; Code &rarr; Verification</strong>. The Design Specification &mdash; traditionally a Figma file, annotated mockups, or a formal document &mdash; serves as the bridge between what was designed and what gets implemented. It's the artifact an auditor traces from user needs to code.</p>
+
+              <p>When you <em>"vibe code"</em> a feature with Claude Code, the code comes first. The design decisions &mdash; layout choices, component structures, interaction patterns, error handling &mdash; are made in real-time during the coding process. They exist in the codebase, but nowhere else. No Figma file. No annotated wireframes. No formal specification document.</p>
+
+              <p>This creates a <strong>traceability gap</strong> in your Design History File. When an auditor asks <em>"Show me the design specification for this feature,"</em> you have nothing to point to &mdash; even though every design decision was intentional and the feature works correctly.</p>
+
+              <div class="callout callout--warning">
+                <div class="callout-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>
+                </div>
+                <div class="callout-content">
+                  <strong>The gap isn't about quality.</strong> The coded feature may be excellent &mdash; thoughtfully designed, well-structured, thoroughly tested. The gap is purely documentary. The design decisions exist, they just aren't captured in the format your quality system requires.
+                </div>
+              </div>
+            </div>
+            <div class="content-visual">
+              <!-- Traditional vs Code-First Workflow Diagram -->
+              <div class="diagram-container">
+                <div class="diagram-label">Traditional Workflow</div>
+                <svg class="diagram" viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <style>
+                    .d-box { fill: #F0FDFA; stroke: #0891B2; stroke-width: 1.5; rx: 8; }
+                    .d-box-active { fill: #0891B2; stroke: #0891B2; stroke-width: 1.5; rx: 8; }
+                    .d-text { font-family: 'Figtree', sans-serif; font-size: 11px; fill: #134E4A; font-weight: 500; }
+                    .d-text-light { font-family: 'Figtree', sans-serif; font-size: 11px; fill: #FFFFFF; font-weight: 500; }
+                    .d-arrow { stroke: #0891B2; stroke-width: 1.5; marker-end: url(#arrowhead); }
+                    .d-check { fill: #22C55E; }
+                  </style>
+                  <defs>
+                    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <path d="M0,0 L8,3 L0,6" fill="#0891B2"/>
+                    </marker>
+                  </defs>
+                  <!-- Boxes -->
+                  <rect class="d-box" x="140" y="10" width="120" height="36"/>
+                  <text class="d-text" x="200" y="33" text-anchor="middle">User Needs</text>
+                  <line class="d-arrow" x1="200" y1="46" x2="200" y2="64"/>
+
+                  <rect class="d-box" x="140" y="66" width="120" height="36"/>
+                  <text class="d-text" x="200" y="89" text-anchor="middle">Design Inputs</text>
+                  <line class="d-arrow" x1="200" y1="102" x2="200" y2="120"/>
+
+                  <rect class="d-box-active" x="120" y="122" width="160" height="36"/>
+                  <text class="d-text-light" x="200" y="145" text-anchor="middle">Design Specification</text>
+                  <line class="d-arrow" x1="200" y1="158" x2="200" y2="176"/>
+
+                  <rect class="d-box" x="140" y="178" width="120" height="36"/>
+                  <text class="d-text" x="200" y="201" text-anchor="middle">Code</text>
+                  <line class="d-arrow" x1="200" y1="214" x2="200" y2="232"/>
+
+                  <rect class="d-box" x="140" y="234" width="120" height="36"/>
+                  <text class="d-text" x="200" y="257" text-anchor="middle">Verification</text>
+
+                  <!-- Check marks -->
+                  <circle class="d-check" cx="106" cy="140" r="8"/>
+                  <path d="M102,140 l3,3 l5,-6" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                  <text class="d-text" x="80" y="144" text-anchor="end" font-size="9" fill="#22C55E">Traceable</text>
+                </svg>
+              </div>
+
+              <div class="diagram-container">
+                <div class="diagram-label">Code-First Reality</div>
+                <svg class="diagram" viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <marker id="arrowhead2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <path d="M0,0 L8,3 L0,6" fill="#0891B2"/>
+                    </marker>
+                    <marker id="arrowhead-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <path d="M0,0 L8,3 L0,6" fill="#DC2626"/>
+                    </marker>
+                  </defs>
+                  <rect class="d-box" x="140" y="10" width="120" height="36"/>
+                  <text class="d-text" x="200" y="33" text-anchor="middle">User Needs</text>
+                  <line class="d-arrow" x1="200" y1="46" x2="200" y2="64"/>
+
+                  <rect class="d-box" x="140" y="66" width="120" height="36"/>
+                  <text class="d-text" x="200" y="89" text-anchor="middle">Design Inputs</text>
+
+                  <!-- Broken path -->
+                  <line x1="200" y1="102" x2="200" y2="120" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+                  <rect x="120" y="122" width="160" height="36" fill="none" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="5 4" rx="8"/>
+                  <text x="200" y="145" text-anchor="middle" font-family="Figtree, sans-serif" font-size="11" fill="#DC2626" font-weight="500">Design Specification ???</text>
+
+                  <line x1="200" y1="158" x2="200" y2="176" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+                  <rect x="140" y="178" width="120" height="36" fill="#134E4A" stroke="#134E4A" stroke-width="1.5" rx="8"/>
+                  <text x="200" y="201" text-anchor="middle" font-family="Figtree, sans-serif" font-size="11" fill="#FFFFFF" font-weight="500">Code (exists first)</text>
+
+                  <line class="d-arrow" x1="200" y1="214" x2="200" y2="232" style="marker-end: url(#arrowhead2)"/>
+
+                  <rect class="d-box" x="140" y="234" width="120" height="36"/>
+                  <text class="d-text" x="200" y="257" text-anchor="middle">Verification</text>
+
+                  <!-- Warning -->
+                  <circle cx="106" cy="140" r="8" fill="#DC2626"/>
+                  <text x="106" y="144" text-anchor="middle" font-family="Figtree, sans-serif" font-size="10" fill="white" font-weight="700">!</text>
+                  <text x="80" y="144" text-anchor="end" font-family="Figtree, sans-serif" font-size="9" fill="#DC2626" font-weight="500">Gap</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 03 — THE HYPOTHESIS                          -->
+    <!-- ============================================ -->
+    <section id="hypothesis" class="section section--dark">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">03</span>
+          <h2 class="section-title">The Hypothesis</h2>
+          <p class="section-subtitle">The design decisions are in the code. They just need extraction.</p>
+        </div>
+        <div class="section-content">
+          <div class="hypothesis-grid">
+            <div class="hypothesis-main">
+              <p>When you build a feature with Claude Code, you're not writing random code. You're making deliberate design decisions: how components are structured, what layout patterns to use, how data flows to the UI, what error states to handle, how interactions work. These decisions <em>are</em> the design specification &mdash; they're just expressed in code rather than in a Figma file.</p>
+
+              <p>Claude Code can read a codebase and identify every design decision embedded in it: component hierarchies, visual patterns, interaction flows, data display rules, accessibility implementations, responsive behaviors. If those decisions can be <strong>extracted, structured, and documented</strong>, the result is a design specification that is <em>more accurate</em> than a traditional pre-implementation spec.</p>
+
+              <div class="callout callout--insight">
+                <div class="callout-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></svg>
+                </div>
+                <div class="callout-content">
+                  <strong>A spec generated from code describes what was actually built.</strong> A traditional spec describes what was intended. In practice, every production codebase diverges from its original design spec &mdash; developers make pragmatic decisions during implementation that never make it back to Figma. Code-first, spec-second eliminates this drift entirely.
+                </div>
+              </div>
+            </div>
+            <div class="hypothesis-sidebar">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="stat-label">Traditional Spec</div>
+                <div class="stat-desc">Documents <em>intent</em>. Drifts from reality during implementation.</div>
+              </div>
+              <div class="stat-card stat-card--active">
+                <div class="stat-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+                </div>
+                <div class="stat-label">Code-First Spec</div>
+                <div class="stat-desc">Documents <em>reality</em>. Extracted from what was actually built.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-image-container">
+            <img src="images/hypothesis.jpg" alt="A document crystallizing from a running software interface — reversed blueprint metaphor" class="section-image" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 04 — REGULATORY FOUNDATION                   -->
+    <!-- ============================================ -->
+    <section id="regulatory" class="section section--light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">04</span>
+          <h2 class="section-title">Regulatory Foundation</h2>
+          <p class="section-subtitle">Where the design specification sits in the Design History File &mdash; and why temporal order doesn't matter.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="reg-standards">
+            <div class="reg-card">
+              <div class="reg-card-header">
+                <span class="reg-badge">FDA</span>
+                <h3>21 CFR 820.30</h3>
+              </div>
+              <p><strong>Design Controls.</strong> Requires design inputs, design outputs, design verification, design validation, and a Design History File. The Design Specification is a <em>design output</em> &mdash; it defines the design solution in terms that allow evaluation against design inputs.</p>
+              <div class="reg-quote">
+                <span class="reg-ref">&sect;820.30(d)</span> "Each manufacturer shall establish and maintain procedures for defining and documenting design output in terms that allow an adequate evaluation of conformance to design input requirements."
+              </div>
+              <p class="reg-note">The regulation requires <strong>conformance evaluation</strong> &mdash; that the spec shows the design meets inputs. It does not specify temporal ordering of when the spec is created relative to implementation.</p>
+            </div>
+
+            <div class="reg-card">
+              <div class="reg-card-header">
+                <span class="reg-badge">IEC</span>
+                <h3>IEC 62304</h3>
+              </div>
+              <p><strong>Software Lifecycle Processes.</strong> Requires Software Architectural Design documentation (decomposing the system into components and interfaces) and Software Detailed Design documentation (logic, data flow, interfaces for each unit). These map directly to what Claude Code can extract from a codebase.</p>
+            </div>
+
+            <div class="reg-card">
+              <div class="reg-card-header">
+                <span class="reg-badge">IEC</span>
+                <h3>IEC 62366</h3>
+              </div>
+              <p><strong>Usability Engineering.</strong> Requires documentation of user interface specifications, including interaction patterns, visual design decisions, and accessibility considerations. The extracted design spec captures all of these from the actual implementation.</p>
+            </div>
+          </div>
+
+          <!-- V-Model Diagram -->
+          <div class="diagram-container diagram-container--wide">
+            <div class="diagram-label">Design Controls V-Model &mdash; Where the Design Spec Sits</div>
+            <svg class="diagram diagram--vmodel" viewBox="0 0 700 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr-v" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#0891B2"/>
+                </marker>
+                <marker id="arr-v-dash" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#94A3B8"/>
+                </marker>
+              </defs>
+              <!-- Left arm (design) -->
+              <rect x="20" y="20" width="140" height="40" rx="6" fill="#F0FDFA" stroke="#0891B2" stroke-width="1.5"/>
+              <text x="90" y="45" text-anchor="middle" font-family="Figtree" font-size="11" fill="#134E4A" font-weight="500">User Needs</text>
+
+              <line x1="110" y1="60" x2="160" y2="88" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr-v)"/>
+
+              <rect x="110" y="90" width="140" height="40" rx="6" fill="#F0FDFA" stroke="#0891B2" stroke-width="1.5"/>
+              <text x="180" y="115" text-anchor="middle" font-family="Figtree" font-size="11" fill="#134E4A" font-weight="500">Design Inputs</text>
+
+              <line x1="200" y1="130" x2="250" y2="158" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr-v)"/>
+
+              <!-- Design Spec - HIGHLIGHTED -->
+              <rect x="200" y="160" width="160" height="44" rx="6" fill="#0891B2" stroke="#0891B2" stroke-width="2"/>
+              <text x="280" y="177" text-anchor="middle" font-family="Figtree" font-size="11" fill="#FFFFFF" font-weight="600">Design Specification</text>
+              <text x="280" y="193" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#B2F5EA" font-weight="400">(Design Output)</text>
+
+              <line x1="310" y1="204" x2="350" y2="240" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr-v)"/>
+
+              <!-- Bottom -->
+              <rect x="300" y="242" width="100" height="40" rx="6" fill="#134E4A" stroke="#134E4A" stroke-width="1.5"/>
+              <text x="350" y="267" text-anchor="middle" font-family="Figtree" font-size="11" fill="#FFFFFF" font-weight="500">Code</text>
+
+              <!-- Right arm (verification) -->
+              <line x1="400" y1="252" x2="440" y2="228" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr-v)"/>
+
+              <rect x="400" y="160" width="160" height="40" rx="6" fill="#F0FDFA" stroke="#0891B2" stroke-width="1.5"/>
+              <text x="480" y="185" text-anchor="middle" font-family="Figtree" font-size="11" fill="#134E4A" font-weight="500">Verification</text>
+
+              <line x1="520" y1="160" x2="560" y2="128" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr-v)"/>
+
+              <rect x="460" y="90" width="140" height="40" rx="6" fill="#F0FDFA" stroke="#0891B2" stroke-width="1.5"/>
+              <text x="530" y="115" text-anchor="middle" font-family="Figtree" font-size="11" fill="#134E4A" font-weight="500">Validation</text>
+
+              <line x1="560" y1="90" x2="600" y2="58" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr-v)"/>
+
+              <rect x="540" y="20" width="140" height="40" rx="6" fill="#F0FDFA" stroke="#0891B2" stroke-width="1.5"/>
+              <text x="610" y="45" text-anchor="middle" font-family="Figtree" font-size="11" fill="#134E4A" font-weight="500">Design Transfer</text>
+
+              <!-- Horizontal traceability lines -->
+              <line x1="160" y1="40" x2="540" y2="40" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4 3"/>
+              <line x1="250" y1="110" x2="460" y2="110" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4 3"/>
+              <line x1="360" y1="182" x2="400" y2="182" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4 3"/>
+
+              <!-- Labels for traceability -->
+              <text x="350" y="35" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#94A3B8">traces to</text>
+              <text x="355" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#94A3B8">traces to</text>
+              <text x="380" y="177" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#94A3B8">verifies</text>
+
+              <!-- DHF bracket -->
+              <rect x="0" y="310" width="700" height="24" rx="4" fill="#E6F7F5"/>
+              <text x="350" y="326" text-anchor="middle" font-family="Figtree" font-size="10" fill="#0891B2" font-weight="600">DESIGN HISTORY FILE (DHF) &mdash; contains or references all of the above</text>
+            </svg>
+          </div>
+
+          <div class="callout callout--key">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <div class="callout-content">
+              <strong>The critical regulatory insight:</strong> Standards require the design specification to <em>exist</em> and be <em>traceable</em>. They require it to demonstrate conformance to design inputs. They do not mandate that it must be authored before implementation begins. The traceability chain &mdash; user needs &rarr; design inputs &rarr; design spec &rarr; code &mdash; holds regardless of temporal ordering.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 05 — RISK & OBJECTION FRAMING                -->
+    <!-- ============================================ -->
+    <section id="risk" class="section section--alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">05</span>
+          <h2 class="section-title">Objections &amp; Risk Framing</h2>
+          <p class="section-subtitle">Addressing the concerns your quality team will raise &mdash; head-on.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="objections-list">
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "The design specification should come <em>before</em> implementation."
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>Regulatory standards require the spec to <strong>exist and be traceable</strong>, not that it precedes code temporally. FDA 820.30(d) requires design output to allow "adequate evaluation of conformance to design input requirements." A spec extracted from code and validated against design inputs satisfies this requirement &mdash; and more accurately, since it reflects what was actually built.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "This is just retroactive documentation &mdash; writing the spec after the fact."
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>It's <strong>extraction + review</strong>, not retroactive justification. The code was written with intentional design decisions. Claude Code extracts and structures those decisions into a formal document. A designer/QA professional then reviews the spec against design inputs and signs off. This review step is the same review that happens in traditional workflows &mdash; it just occurs after extraction rather than after handoff.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "An auditor won't accept a design spec generated from code."
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>Auditors verify <strong>traceability</strong>, not process ordering. If the spec clearly traces back to design inputs, was formally reviewed and approved, and maps to specific code components &mdash; the traceability chain is complete. The auditor sees: user needs &rarr; design inputs &rarr; reviewed design spec &rarr; verified code. The DHF is intact.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "What about design reviews? Don't those need to happen before coding?"
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>Design reviews happen <strong>after the spec is generated and before it's approved</strong>. The designer reviews visual consistency, interaction completeness, and accessibility. QA reviews traceability to design inputs. This is substantively the same review &mdash; it just reviews the actual implementation rather than an aspirational mockup.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "Spec-code drift is a feature &mdash; it helps catch implementation errors."
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>In practice, spec-code drift almost always means <strong>the spec is outdated</strong>, not that the code is wrong. Developers make pragmatic decisions during implementation that improve the design but never make it back to Figma. This approach eliminates that ambiguity entirely &mdash; the spec always matches the code because it's derived from it. Errors are caught during the review step, where the spec is validated against design inputs.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "How do we track what the AI changed vs. what a human wrote?"
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p><strong>Git tracks every change regardless of origin.</strong> <code>Co-Authored-By</code> headers in commits make AI involvement transparent. The human who invoked the tool <strong>owns the change</strong> &mdash; same as using any other development tool. The segregation comes from review, not authorship.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "AI-generated code needs different governance than human-written code."
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>It doesn't. Your existing process &mdash; PR reviews, Jira traceability, CI gates, 2-reviewer approval &mdash; governs the <strong>output</strong>, not the method of production. Treat AI-assisted code identically. The only addition: document Claude Code in your tool register (<strong>one-time qualification</strong>) and ensure <code>Co-Authored-By</code> headers for transparency.</p>
+              </div>
+            </div>
+
+            <div class="objection-card">
+              <div class="objection-q">
+                <span class="objection-label">Objection</span>
+                "What stops an engineer from modifying design-verified UI and merging without design review?"
+              </div>
+              <div class="objection-a">
+                <span class="objection-label objection-label--response">Response</span>
+                <p>Nothing stops it technically &mdash; and that's true with or without this workflow. What this approach adds is <strong>visibility</strong>. Every spec carries a <strong>verification status tied to the merge commit on main</strong>. When UI code changes post-verification, the spec goes STALE. The changelog shows exactly what diverged, when, and by whom. You can't prevent unauthorized changes, but you can make them impossible to hide. Pair with a CI check that flags PRs touching UI code without corresponding spec updates.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="risk-summary">
+            <h3>Risk Mitigation Summary</h3>
+            <div class="risk-grid">
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>Review step is mandatory</strong>
+                  <p>Designer + QA sign off on extracted spec before it enters the DHF.</p>
+                </div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>Traceability matrix links back to user needs</strong>
+                  <p>Every spec section traces to design inputs which trace to user needs.</p>
+                </div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>Zero spec-code drift</strong>
+                  <p>Spec is derived from code, eliminating the #1 traceability gap.</p>
+                </div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>Version-controlled spec-code sync</strong>
+                  <p>Spec and code share the same version control. Changes to one are reflected in the other.</p>
+                </div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>AI provenance is transparent</strong>
+                  <p><code>Co-Authored-By</code> headers in every AI-assisted commit. Git history shows <strong>exactly what changed and who owned it</strong>.</p>
+                </div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>Tool is qualified once</strong>
+                  <p>Claude Code documented in tool register with validation evidence. Referenced in DHF entries, <strong>not re-qualified per use</strong>.</p>
+                </div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-icon risk-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+                </div>
+                <div>
+                  <strong>Post-handoff changes are visible</strong>
+                  <p>Spec changelog + verification status makes it <strong>impossible to silently override</strong> design-verified UI. Divergence is flagged, not hidden.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-image-container">
+            <img src="images/risk-trust.jpg" alt="Trust and verification metaphor — precision instruments validating a document" class="section-image" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 06 — THE METHODOLOGY                         -->
+    <!-- ============================================ -->
+    <section id="methodology" class="section section--dark">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">06</span>
+          <h2 class="section-title">The Methodology</h2>
+          <p class="section-subtitle">Seven steps from code to audit-ready design specification &mdash; including ongoing maintenance.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="method-steps">
+            <div class="method-step">
+              <div class="method-step-number">1</div>
+              <div class="method-step-content">
+                <h3>Code the Feature</h3>
+                <p>Build the feature using Claude Code. Iterate on the UI, interactions, and data display until it works correctly and meets the design intent. This is your normal agentic coding workflow &mdash; focus on building a great feature.</p>
+                <div class="method-tag">Your existing workflow &mdash; no change needed</div>
+              </div>
+            </div>
+
+            <div class="method-step">
+              <div class="method-step-number">2</div>
+              <div class="method-step-content">
+                <h3>Analyze the Codebase</h3>
+                <p>Prompt Claude Code to read and map the codebase: component tree, screen inventory, navigation paths, shared utilities, design system usage, data models. This produces a structural understanding of what was built.</p>
+                <div class="method-tag">Claude Code reads your code and builds a mental model</div>
+              </div>
+            </div>
+
+            <div class="method-step">
+              <div class="method-step-number">3</div>
+              <div class="method-step-content">
+                <h3>Extract Design Decisions</h3>
+                <p>Prompt Claude Code to identify the design decisions embedded in the code: layout patterns, component states, interaction behaviors, error handling, visual design choices, accessibility implementations. Each decision gets documented with its rationale.</p>
+                <div class="method-tag">Design decisions become explicit &amp; documented</div>
+              </div>
+            </div>
+
+            <div class="method-step">
+              <div class="method-step-number">4</div>
+              <div class="method-step-content">
+                <h3>Generate the Specification</h3>
+                <p>Claude Code outputs a structured design specification document following the template (see <a href="#spec-contents">Section 08</a>). The spec includes all 11 required sections: from document header through traceability matrix. Each section references specific code files and components.</p>
+                <div class="method-tag">Structured document ready for review</div>
+              </div>
+            </div>
+
+            <div class="method-step">
+              <div class="method-step-number">5</div>
+              <div class="method-step-content">
+                <h3>Review &amp; Approve</h3>
+                <p>A designer reviews visual consistency, interaction completeness, and design system alignment. QA reviews traceability to design inputs and regulatory compliance. Both sign off on the spec. This is your standard design review &mdash; same rigor, same approvals.</p>
+                <div class="method-tag">Same review process as traditional workflow</div>
+              </div>
+            </div>
+
+            <div class="method-step">
+              <div class="method-step-number">6</div>
+              <div class="method-step-content">
+                <h3>Lock Traceability</h3>
+                <p>The approved spec is version-controlled alongside the code. Code files reference the spec version. The spec references specific code files and line ranges. The traceability chain is complete: user needs &rarr; design inputs &rarr; design spec &rarr; code. The DHF entry is documented.</p>
+                <div class="method-tag">Traceability chain complete &mdash; DHF is audit-ready</div>
+              </div>
+            </div>
+
+            <div class="method-step method-step--maintain">
+              <div class="method-step-number">7</div>
+              <div class="method-step-content">
+                <h3>Maintain the Spec</h3>
+                <p>When code changes after verification &mdash; by anyone, design or engineering &mdash; the spec must stay current. Run the <strong>Update prompt</strong> to generate a delta. Review the delta against design intent. If the change is design-approved: update the spec, add a changelog entry, re-verify. If unauthorized: flag for discussion, and the spec stays <strong>STALE</strong> until resolved.</p>
+                <div class="method-tag">Living process &mdash; spec stays accurate post-handoff</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Methodology Flow Diagram -->
+          <div class="diagram-container diagram-container--wide diagram-container--dark">
+            <div class="diagram-label">Methodology Flow</div>
+            <svg class="diagram diagram--flow" viewBox="0 0 700 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr-flow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#22D3EE"/>
+                </marker>
+              </defs>
+              <!-- Step boxes -->
+              <rect x="10" y="30" width="90" height="50" rx="6" fill="#164E63" stroke="#22D3EE" stroke-width="1"/>
+              <text x="55" y="52" text-anchor="middle" font-family="Figtree" font-size="9" fill="#22D3EE" font-weight="600">1. CODE</text>
+              <text x="55" y="68" text-anchor="middle" font-family="Noto Sans" font-size="7" fill="#94A3B8">Build feature</text>
+              <line x1="100" y1="55" x2="120" y2="55" stroke="#22D3EE" stroke-width="1" marker-end="url(#arr-flow)"/>
+
+              <rect x="122" y="30" width="90" height="50" rx="6" fill="#164E63" stroke="#22D3EE" stroke-width="1"/>
+              <text x="167" y="52" text-anchor="middle" font-family="Figtree" font-size="9" fill="#22D3EE" font-weight="600">2. ANALYZE</text>
+              <text x="167" y="68" text-anchor="middle" font-family="Noto Sans" font-size="7" fill="#94A3B8">Map codebase</text>
+              <line x1="212" y1="55" x2="232" y2="55" stroke="#22D3EE" stroke-width="1" marker-end="url(#arr-flow)"/>
+
+              <rect x="234" y="30" width="90" height="50" rx="6" fill="#164E63" stroke="#22D3EE" stroke-width="1"/>
+              <text x="279" y="52" text-anchor="middle" font-family="Figtree" font-size="9" fill="#22D3EE" font-weight="600">3. EXTRACT</text>
+              <text x="279" y="68" text-anchor="middle" font-family="Noto Sans" font-size="7" fill="#94A3B8">Design decisions</text>
+              <line x1="324" y1="55" x2="344" y2="55" stroke="#22D3EE" stroke-width="1" marker-end="url(#arr-flow)"/>
+
+              <rect x="346" y="30" width="90" height="50" rx="6" fill="#164E63" stroke="#22D3EE" stroke-width="1"/>
+              <text x="391" y="52" text-anchor="middle" font-family="Figtree" font-size="9" fill="#22D3EE" font-weight="600">4. GENERATE</text>
+              <text x="391" y="68" text-anchor="middle" font-family="Noto Sans" font-size="7" fill="#94A3B8">Spec document</text>
+              <line x1="436" y1="55" x2="456" y2="55" stroke="#22D3EE" stroke-width="1" marker-end="url(#arr-flow)"/>
+
+              <rect x="458" y="30" width="90" height="50" rx="6" fill="#164E63" stroke="#22D3EE" stroke-width="1"/>
+              <text x="503" y="52" text-anchor="middle" font-family="Figtree" font-size="9" fill="#22D3EE" font-weight="600">5. REVIEW</text>
+              <text x="503" y="68" text-anchor="middle" font-family="Noto Sans" font-size="7" fill="#94A3B8">Designer + QA</text>
+              <line x1="548" y1="55" x2="568" y2="55" stroke="#22D3EE" stroke-width="1" marker-end="url(#arr-flow)"/>
+
+              <rect x="570" y="30" width="120" height="50" rx="6" fill="#0891B2" stroke="#22D3EE" stroke-width="1.5"/>
+              <text x="630" y="52" text-anchor="middle" font-family="Figtree" font-size="9" fill="#FFFFFF" font-weight="600">6. LOCK</text>
+              <text x="630" y="68" text-anchor="middle" font-family="Noto Sans" font-size="7" fill="#E0F2FE">Traceability locked</text>
+
+              <!-- Feedback loop -->
+              <path d="M503 80 L503 100 L167 100 L167 80" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-flow)"/>
+              <text x="335" y="96" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#94A3B8">review feedback &rarr; iterate</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 07 — GOVERNED DELIVERY                        -->
+    <!-- ============================================ -->
+    <section id="governance" class="section section--light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">07</span>
+          <h2 class="section-title">Governed Delivery</h2>
+          <p class="section-subtitle">How spec-from-code plugs into your existing V-model, PR gates, and CI pipeline &mdash; with zero new process.</p>
+        </div>
+        <div class="section-content">
+
+          <!-- V-Model Diagram -->
+          <div class="diagram-container diagram-container--wide">
+            <div class="diagram-label">V-Model Traceability &mdash; Where the Extracted Spec Fits</div>
+            <div class="vmodel-diagram">
+              <div class="vmodel-left">
+                <div class="vmodel-node">User Needs</div>
+                <div class="vmodel-connector">&darr;</div>
+                <div class="vmodel-node">System Requirements</div>
+                <div class="vmodel-connector">&darr;</div>
+                <div class="vmodel-node">Software Requirements</div>
+                <div class="vmodel-connector">&darr;</div>
+                <div class="vmodel-node vmodel-node--highlight">Detailed Design<div class="vmodel-callout">&larr; The extracted design spec IS this artifact</div></div>
+              </div>
+              <div class="vmodel-bottom">
+                <div class="vmodel-node vmodel-node--code">Implementation</div>
+              </div>
+              <div class="vmodel-right">
+                <div class="vmodel-node vmodel-node--highlight">Unit Testing<div class="vmodel-callout">Code verified against spec &rarr;</div></div>
+                <div class="vmodel-connector">&uarr;</div>
+                <div class="vmodel-node">Software Verification</div>
+                <div class="vmodel-connector">&uarr;</div>
+                <div class="vmodel-node">System Verification</div>
+                <div class="vmodel-connector">&uarr;</div>
+                <div class="vmodel-node">Validation</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5 Governance Cards -->
+          <h3 class="governance-heading">Your Process Already Handles This</h3>
+          <p class="governance-intro">Each AI governance concern maps to something your engineering team already does.</p>
+
+          <div class="governance-cards">
+            <div class="governance-card">
+              <div class="governance-card-header">
+                <span class="governance-card-concern">Traceability</span>
+                <span class="governance-card-maps">&rarr; Jira + PR links</span>
+              </div>
+              <p>Every branch ties to a Jira task. Every PR references the task. The extracted spec traces to design inputs. Chain: <strong>User Need &rarr; Jira Task &rarr; Branch &rarr; Code + Spec &rarr; PR &rarr; Merged Main.</strong></p>
+            </div>
+
+            <div class="governance-card">
+              <div class="governance-card-header">
+                <span class="governance-card-concern">Human accountability</span>
+                <span class="governance-card-maps">&rarr; Git authorship</span>
+              </div>
+              <p>Someone uses the AI tool. <strong>They own the branch, the commits, the PR.</strong> <code>Co-Authored-By: Claude</code> in commits makes the AI role transparent. The human is the first line of defense.</p>
+            </div>
+
+            <div class="governance-card">
+              <div class="governance-card-header">
+                <span class="governance-card-concern">Segregation of duties</span>
+                <span class="governance-card-maps">&rarr; PR review gates</span>
+              </div>
+              <p>Design authors code + spec. Engineering reviews the PR (<strong>2 reviewers minimum</strong>). QA reviews traceability. Same people, same process, same gates.</p>
+            </div>
+
+            <div class="governance-card">
+              <div class="governance-card-header">
+                <span class="governance-card-concern">Change control</span>
+                <span class="governance-card-maps">&rarr; Branch protection + CI</span>
+              </div>
+              <p>Feature branches, protected main, CI gates. AI-generated code goes through the <strong>same pipeline as hand-written code</strong>. No special treatment, no exceptions.</p>
+            </div>
+
+            <div class="governance-card">
+              <div class="governance-card-header">
+                <span class="governance-card-concern">Tool qualification</span>
+                <span class="governance-card-maps">&rarr; Document once, reference always</span>
+              </div>
+              <p>Qualify Claude Code in your tool register. <strong>One-time effort</strong> with validation evidence. Referenced in every DHF entry &mdash; not re-qualified per use.</p>
+            </div>
+          </div>
+
+          <!-- Post-Handoff Integrity -->
+          <h3 class="governance-heading">Post-Handoff Integrity: The Changelog Model</h3>
+          <p class="governance-intro">The core innovation addressing the deepest engineering concern: <strong>what happens after design hands off code?</strong></p>
+
+          <div class="callout callout--warning">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="callout-content">
+              <strong>The problem:</strong> After design verifies and hands off UI code, engineers can modify it in subsequent PRs with only engineer approval. The design-verified state is silently overwritten.
+            </div>
+          </div>
+
+          <div class="changelog-model">
+            <div class="changelog-section">
+              <h4>Verification Header</h4>
+              <p>Top of every spec and sub-spec:</p>
+              <pre class="changelog-code"><code>Verified by:    [Designer Name]
+Verified at:    [Merge commit SHA on main]
+Verified date:  [Date]
+Status:         VERIFIED | STALE (code changed since verification)</code></pre>
+            </div>
+
+            <div class="changelog-section">
+              <h4>Changelog Table</h4>
+              <p>Appended to every spec and sub-spec:</p>
+              <div class="changelog-table-wrapper">
+                <table class="changelog-table">
+                  <thead>
+                    <tr><th>Version</th><th>Date</th><th>Author</th><th>Git Ref</th><th>Summary</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1.0</td><td>2026-02-15</td><td>S. Dunn-Lubin</td><td><code>abc123</code></td><td>Initial spec extracted from usability prototype</td></tr>
+                    <tr><td>1.1</td><td>2026-02-20</td><td>S. Dunn-Lubin</td><td><code>def456</code></td><td>Updated after usability testing feedback</td></tr>
+                    <tr class="changelog-row--stale"><td>1.2</td><td>2026-03-01</td><td>J. Developer</td><td><code>ghi789</code></td><td>Modified alert card layout in feature PR #42</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="changelog-section">
+              <h4>How It Works in Practice</h4>
+              <div class="changelog-flow">
+                <div class="changelog-step">
+                  <span class="changelog-step-num">1</span>
+                  <span>Design extracts spec &rarr; changelog entry + verification status set to <strong>VERIFIED</strong></span>
+                </div>
+                <div class="changelog-step">
+                  <span class="changelog-step-num">2</span>
+                  <span>Engineer modifies UI code &rarr; their merged PR should update the spec (<strong>or CI flags it</strong>)</span>
+                </div>
+                <div class="changelog-step">
+                  <span class="changelog-step-num">3</span>
+                  <span>If spec is updated &rarr; changelog entry shows <strong>who changed what and why</strong></span>
+                </div>
+                <div class="changelog-step">
+                  <span class="changelog-step-num">4</span>
+                  <span>If spec is NOT updated &rarr; verification status goes <strong>STALE</strong> &rarr; visible to design + QA</span>
+                </div>
+                <div class="changelog-step">
+                  <span class="changelog-step-num">5</span>
+                  <span>Design reviews STALE specs periodically &rarr; re-verifies or raises concerns</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout--insight">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div class="callout-content">
+              <strong>You can't prevent engineers from modifying UI code. But you can make it impossible to do so silently.</strong> The changelog is the audit trail. Divergence becomes a conversation &mdash; not a silent override.
+            </div>
+          </div>
+
+          <!-- Modular Spec Structure -->
+          <h3 class="governance-heading">Modular Spec Structure</h3>
+          <p class="governance-intro">Instead of one monolithic spec, use per-feature sub-specs with an index.</p>
+
+          <div class="modular-spec">
+            <pre class="modular-spec-tree"><code>/design-specs/
+  index.md              &larr; Master index, links to all feature specs
+  patient-detail.md     &larr; Feature spec + changelog + verification status
+  sensor-connection.md  &larr; Feature spec + changelog + verification status
+  alert-system.md       &larr; Feature spec + changelog + verification status
+  ...</code></pre>
+            <div class="modular-spec-benefits">
+              <div class="modular-benefit">Changes to one feature <strong>don't invalidate the whole spec</strong></div>
+              <div class="modular-benefit">Verification status is <strong>per-feature</strong> &mdash; one STALE feature doesn't taint all</div>
+              <div class="modular-benefit">Code review is <strong>scoped</strong> &mdash; reviewers check only the relevant sub-spec</div>
+              <div class="modular-benefit">Maps naturally to <strong>Jira tasks</strong> (one task &harr; one feature spec)</div>
+            </div>
+          </div>
+
+          <!-- Automated Safeguards -->
+          <h3 class="governance-heading">Automated Safeguards</h3>
+          <div class="safeguards-grid">
+            <div class="safeguard-item">
+              <strong>CI spec-check</strong>
+              <p>If a PR modifies files in <code>src/ui/</code> but doesn't touch <code>design-specs/</code>, <strong>flag for design review</strong>.</p>
+            </div>
+            <div class="safeguard-item">
+              <strong>Co-authorship enforcement</strong>
+              <p>Pre-commit hooks <strong>enforce <code>Co-Authored-By</code></strong> when AI tools are used in the commit.</p>
+            </div>
+            <div class="safeguard-item">
+              <strong>Spec staleness check</strong>
+              <p>Compare spec's <code>verified-at</code> merge to HEAD for modified files. <strong>Surface STALE specs</strong> in CI output.</p>
+            </div>
+            <div class="safeguard-item">
+              <strong>Standard pipeline</strong>
+              <p>Static analysis + SCA in PR pipeline &mdash; <strong>same gates as any code</strong>, regardless of origin.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 08 — WHAT GOES IN THE DESIGN SPEC            -->
+    <!-- ============================================ -->
+    <section id="spec-contents" class="section section--alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">08</span>
+          <h2 class="section-title">What Goes in the Design Spec</h2>
+          <p class="section-subtitle">The 11 sections that make a design specification audit-ready &mdash; and why each matters for traceability.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="spec-sections-grid">
+            <div class="spec-section-card">
+              <div class="spec-section-num">1</div>
+              <h3>Document Header</h3>
+              <p>Version, date, author, feature scope, applicable regulatory standards (820.30, 62304, 62366). Establishes the document's identity and regulatory context.</p>
+              <div class="spec-why"><strong>Why:</strong> Auditors need to identify the document, its version, and which regulations it addresses.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">2</div>
+              <h3>Design Intent</h3>
+              <p>What the feature does, which user needs it addresses, and explicit links to design input documents. This is the traceability anchor &mdash; every other section traces back to here.</p>
+              <div class="spec-why"><strong>Why:</strong> Establishes the chain from user needs &rarr; design inputs &rarr; this specification.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">3</div>
+              <h3>Screen Inventory</h3>
+              <p>Every screen or view in the feature: name, purpose, navigation path, parent/child relationships. Include screenshots or rendered views where possible.</p>
+              <div class="spec-why"><strong>Why:</strong> Provides the map of the UI surface area. An auditor can verify every screen was designed intentionally.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">4</div>
+              <h3>Component Specification</h3>
+              <p>Each UI component: visual description, all states (default, hover, active, disabled, error, loading), behavior, props/parameters, and accessibility attributes.</p>
+              <div class="spec-why"><strong>Why:</strong> Components are the building blocks. Documenting their states ensures no interaction was accidental.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">5</div>
+              <h3>Layout &amp; Visual Design</h3>
+              <p>Grid system, spacing scale, typography hierarchy, color usage, responsive breakpoints, and how the layout adapts across viewport sizes.</p>
+              <div class="spec-why"><strong>Why:</strong> Visual design decisions are design outputs. Layout rules demonstrate systematic, not arbitrary, design.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">6</div>
+              <h3>Interaction Design</h3>
+              <p>User flows through the feature, transitions between states, error state handling, loading behaviors, edge cases, and gesture/input handling.</p>
+              <div class="spec-why"><strong>Why:</strong> Interactions define the user experience. Documenting them shows every flow was considered.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">7</div>
+              <h3>Data Display</h3>
+              <p>How data maps to UI elements: formatting rules, units, precision, empty states, error states, real-time update behavior, and data freshness indicators.</p>
+              <div class="spec-why"><strong>Why:</strong> Medical devices display critical data. Every formatting decision has clinical implications.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">8</div>
+              <h3>Design Rationale</h3>
+              <p>Why specific design choices were made: trade-offs considered, alternatives evaluated, constraints that drove decisions. Links back to user needs and design inputs.</p>
+              <div class="spec-why"><strong>Why:</strong> The traceability core. An auditor understands HOW design inputs became design decisions.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">9</div>
+              <h3>Design System Alignment</h3>
+              <p>Which design tokens, patterns, and components from the existing design system were used. Deviations from the design system and their justifications.</p>
+              <div class="spec-why"><strong>Why:</strong> Demonstrates consistency with the broader product design language and documents exceptions.</div>
+            </div>
+
+            <div class="spec-section-card">
+              <div class="spec-section-num">10</div>
+              <h3>Accessibility</h3>
+              <p>WCAG compliance level, contrast ratios, screen reader behavior, keyboard navigation, touch target sizes, and any accessibility-specific design decisions.</p>
+              <div class="spec-why"><strong>Why:</strong> IEC 62366 usability requirements. Accessibility is a design output that must be documented.</div>
+            </div>
+
+            <div class="spec-section-card spec-section-card--highlight">
+              <div class="spec-section-num">11</div>
+              <h3>Traceability Matrix</h3>
+              <p>A table mapping: user needs &rarr; design input references &rarr; spec section numbers &rarr; code file paths and component names. This is the auditor's roadmap.</p>
+              <div class="spec-why"><strong>Why:</strong> The single artifact that proves end-to-end traceability. Auditors start here.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 09 — FOR DEVELOPERS                          -->
+    <!-- ============================================ -->
+    <section id="for-developers" class="section section--dark">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">09</span>
+          <h2 class="section-title">For Developers</h2>
+          <p class="section-subtitle">How to code review against a generated design spec &mdash; and how to trust it.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="dev-intro">
+            <p>In this workflow, you receive code alongside a design specification that was generated from that code. Your role shifts: instead of implementing a spec, you're <strong>verifying that a spec accurately captures what the code does</strong>. This is a different kind of code review &mdash; and in many ways, a more valuable one.</p>
+          </div>
+
+          <div class="dev-workflow">
+            <h3>Code Review Workflow</h3>
+            <div class="dev-steps">
+              <div class="dev-step">
+                <div class="dev-step-num">1</div>
+                <div class="dev-step-text">
+                  <strong>Open the PR + the design spec side by side.</strong> The spec should reference specific files and components. Use the traceability matrix (Section 11) as your review map.
+                </div>
+              </div>
+              <div class="dev-step">
+                <div class="dev-step-num">2</div>
+                <div class="dev-step-text">
+                  <strong>Verify component states.</strong> For each component in the spec, check that the code handles every listed state: default, hover, active, disabled, error, loading. Flag any states the spec lists that the code doesn't handle &mdash; or vice versa.
+                </div>
+              </div>
+              <div class="dev-step">
+                <div class="dev-step-num">3</div>
+                <div class="dev-step-text">
+                  <strong>Verify interactions.</strong> Walk through each user flow described in the spec. Does the code implement every transition, error path, and edge case? Are loading states handled?
+                </div>
+              </div>
+              <div class="dev-step">
+                <div class="dev-step-num">4</div>
+                <div class="dev-step-text">
+                  <strong>Verify data display.</strong> Check formatting rules, units, precision, and empty/error states against the spec. Medical data display is safety-critical &mdash; this section deserves extra scrutiny.
+                </div>
+              </div>
+              <div class="dev-step">
+                <div class="dev-step-num">5</div>
+                <div class="dev-step-text">
+                  <strong>Flag discrepancies.</strong> If the spec says one thing and the code does another, the <em>code is the source of truth</em> in this workflow. Flag the discrepancy so the spec gets updated &mdash; never change the code to match a generated spec.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout--dev">
+            <div class="callout-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+            </div>
+            <div class="callout-content">
+              <strong>The key mental model shift:</strong> In traditional workflows, code must match the spec. In this workflow, the spec must match the code. When they disagree, update the spec. The code was built intentionally &mdash; the spec is a description of that intent, and descriptions can be imperfect.
+            </div>
+          </div>
+
+          <div class="dev-trust">
+            <h3>How to Trust the Generated Spec</h3>
+            <div class="trust-grid">
+              <div class="trust-item">
+                <h4>What to verify</h4>
+                <ul>
+                  <li>Component states match actual code behavior</li>
+                  <li>User flows cover all paths (happy + error)</li>
+                  <li>Data formatting rules match implementation</li>
+                  <li>Accessibility claims are real (test with screen reader)</li>
+                  <li>Traceability matrix points to correct files</li>
+                </ul>
+              </div>
+              <div class="trust-item">
+                <h4>What to flag</h4>
+                <ul>
+                  <li>States described in spec but not implemented</li>
+                  <li>Code behavior not captured in spec</li>
+                  <li>Vague design rationale (needs specificity)</li>
+                  <li>Missing error/edge case documentation</li>
+                  <li>Broken traceability links (file paths changed)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 10 — FOR DESIGNERS                           -->
+    <!-- ============================================ -->
+    <section id="for-designers" class="section section--light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">10</span>
+          <h2 class="section-title">For Designers</h2>
+          <p class="section-subtitle">Your role evolves &mdash; from author to reviewer, validator, and design system steward.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="designer-intro">
+            <p>This workflow doesn't replace designers. It changes <em>when</em> you engage. Instead of creating mockups that become the spec, you <strong>review an extracted spec against design inputs</strong> and validate that the implemented design meets user needs, follows design principles, and maintains system consistency.</p>
+          </div>
+
+          <div class="role-evolution">
+            <div class="role-card">
+              <div class="role-card-header">
+                <h3>Reviewer</h3>
+                <span class="role-badge">Primary</span>
+              </div>
+              <p>Review the generated design spec for visual consistency, interaction completeness, and user experience quality. You're the quality gate between "code that works" and "design that's right."</p>
+              <ul>
+                <li>Does the layout follow established patterns?</li>
+                <li>Are interactions intuitive and complete?</li>
+                <li>Do error states guide the user effectively?</li>
+                <li>Is the information hierarchy correct?</li>
+              </ul>
+            </div>
+
+            <div class="role-card">
+              <div class="role-card-header">
+                <h3>Validator</h3>
+                <span class="role-badge">Critical</span>
+              </div>
+              <p>Validate that the design meets user needs and design inputs. This is the regulatory traceability check &mdash; does what was built actually address what was intended?</p>
+              <ul>
+                <li>Does the feature address the documented user needs?</li>
+                <li>Are design inputs satisfied by the implementation?</li>
+                <li>Would a user accomplish their task effectively?</li>
+                <li>Are there accessibility gaps?</li>
+              </ul>
+            </div>
+
+            <div class="role-card">
+              <div class="role-card-header">
+                <h3>Design System Steward</h3>
+                <span class="role-badge">Ongoing</span>
+              </div>
+              <p>Maintain and evolve the design system that guides future agentic coding. The stronger the design system, the better Claude Code's output. Your design system becomes the "design input" for code generation.</p>
+              <ul>
+                <li>Update tokens and patterns based on reviewed specs</li>
+                <li>Document new components that emerge from coding</li>
+                <li>Ensure consistency across features</li>
+                <li>Define interaction patterns for future features</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="designer-when">
+            <h3>When to Intervene</h3>
+            <p>Flag the spec for revision when:</p>
+            <ul class="intervention-list">
+              <li>The design doesn't meet user needs &mdash; even if it technically works</li>
+              <li>Visual design violates established design principles or brand guidelines</li>
+              <li>Interaction patterns are inconsistent with the rest of the product</li>
+              <li>Accessibility falls below your standards</li>
+              <li>The design rationale is weak or missing &mdash; decisions should be traceable to user needs</li>
+            </ul>
+          </div>
+
+          <div class="section-image-container">
+            <img src="images/designer-evolution.jpg" alt="Craftsmanship evolution metaphor — a designer's role transforming from creator to steward" class="section-image" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 11 — PROMPT BUILDER                          -->
+    <!-- ============================================ -->
+    <section id="prompt-builder" class="section section--dark">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">11</span>
+          <h2 class="section-title">Prompt Builder</h2>
+          <p class="section-subtitle">Generate tailored Claude Code prompts for your project. Fill in the details, select your mode, and get prompts to run in sequence.</p>
+        </div>
+        <div class="section-content">
+
+          <div id="prompt-form" class="prompt-form">
+            <div class="prompt-toggle">
+              <button class="toggle-btn active" data-mode="greenfield">New Product (Greenfield)</button>
+              <button class="toggle-btn" data-mode="brownfield">Feature Addition (Brownfield)</button>
+              <button class="toggle-btn" data-mode="update">Spec Update (Delta)</button>
+            </div>
+
+            <div class="prompt-fields">
+              <div class="field-group">
+                <label for="project-name" class="field-label">Project Name</label>
+                <input type="text" id="project-name" class="field-input" placeholder="e.g., Admin Hub">
+              </div>
+
+              <div class="field-group">
+                <label for="tech-stack" class="field-label">Tech Stack</label>
+                <select id="tech-stack" class="field-input">
+                  <option value="react">React + TypeScript</option>
+                  <option value="compose">Jetpack Compose (Kotlin)</option>
+                  <option value="swiftui">SwiftUI</option>
+                  <option value="flutter">Flutter</option>
+                  <option value="nextjs">Next.js</option>
+                  <option value="vue">Vue.js</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="feature-scope" class="field-label">Feature / Scope Description</label>
+                <textarea id="feature-scope" class="field-input field-textarea" placeholder="Describe what the feature does and what screens/components are involved..." rows="3"></textarea>
+              </div>
+
+              <div class="field-group">
+                <label for="key-screens" class="field-label">Key Screens or Components</label>
+                <textarea id="key-screens" class="field-input field-textarea" placeholder="e.g., Patient Detail, Vitals Panel, Alert History, Clinical Notes..." rows="2"></textarea>
+              </div>
+
+              <div class="field-group">
+                <label for="design-system" class="field-label">Design System Reference <span class="field-optional">(optional)</span></label>
+                <input type="text" id="design-system" class="field-input" placeholder="Path to design system file or URL">
+              </div>
+
+              <!-- Brownfield-only fields -->
+              <div class="brownfield-fields hidden">
+                <div class="field-group">
+                  <label for="existing-spec" class="field-label">Existing Spec Path</label>
+                  <input type="text" id="existing-spec" class="field-input" placeholder="Path to existing design specification">
+                </div>
+                <div class="field-group">
+                  <label for="whats-new" class="field-label">What Changed / What's New</label>
+                  <textarea id="whats-new" class="field-input field-textarea" placeholder="Describe the new features or changes added to the existing product..." rows="3"></textarea>
+                </div>
+              </div>
+
+              <!-- Update-only fields -->
+              <div class="update-fields hidden">
+                <div class="field-group">
+                  <label for="update-spec-path" class="field-label">Previous Spec Version Path</label>
+                  <input type="text" id="update-spec-path" class="field-input" placeholder="Path to the spec being updated (e.g., design-specs/patient-detail.md)">
+                </div>
+                <div class="field-group">
+                  <label for="update-verified-sha" class="field-label">Previous Verified Merge SHA</label>
+                  <input type="text" id="update-verified-sha" class="field-input" placeholder="e.g., abc1234 (the merge commit on main the spec was last verified at)">
+                </div>
+                <div class="field-group">
+                  <label for="update-current-ref" class="field-label">Current Commit / Branch</label>
+                  <input type="text" id="update-current-ref" class="field-input" placeholder="e.g., feature/alert-redesign or HEAD">
+                </div>
+                <div class="field-group">
+                  <label for="update-description" class="field-label">What Changed <span class="field-optional">(or leave blank to auto-detect from git diff)</span></label>
+                  <textarea id="update-description" class="field-input field-textarea" placeholder="Brief description of changes since last verification..." rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <button id="generate-prompt" class="generate-btn">Generate Prompts</button>
+          </div>
+
+          <div id="prompt-output" class="prompt-output hidden">
+            <h3 class="prompt-output-title">Your Claude Code Prompts</h3>
+            <p id="prompt-output-desc" class="prompt-output-desc">Run these prompts in sequence in Claude Code. Each builds on the previous step's output.</p>
+
+            <div class="prompt-block" id="prompt-block-1">
+              <div class="prompt-block-header">
+                <span class="prompt-block-label" id="prompt-label-1">Step 1: Codebase Analysis</span>
+                <button class="copy-btn" data-target="prompt-1">Copy</button>
+              </div>
+              <pre id="prompt-1" class="prompt-block-content"><code></code></pre>
+            </div>
+
+            <div class="prompt-block" id="prompt-block-2">
+              <div class="prompt-block-header">
+                <span class="prompt-block-label" id="prompt-label-2">Step 2: Design Decision Extraction</span>
+                <button class="copy-btn" data-target="prompt-2">Copy</button>
+              </div>
+              <pre id="prompt-2" class="prompt-block-content"><code></code></pre>
+            </div>
+
+            <div class="prompt-block" id="prompt-block-3">
+              <div class="prompt-block-header">
+                <span class="prompt-block-label" id="prompt-label-3">Step 3: Specification Generation</span>
+                <button class="copy-btn" data-target="prompt-3">Copy</button>
+              </div>
+              <pre id="prompt-3" class="prompt-block-content"><code></code></pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 12 — TEMPLATES                               -->
+    <!-- ============================================ -->
+    <section id="templates" class="section section--light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">12</span>
+          <h2 class="section-title">Templates</h2>
+          <p class="section-subtitle">Copyable design specification scaffolds &mdash; ready to fill with Claude Code's output.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="template-tabs">
+            <button class="template-tab active" data-template="greenfield">Greenfield (New Product)</button>
+            <button class="template-tab" data-template="brownfield">Brownfield (Feature Addition)</button>
+            <button class="template-tab" data-template="update">Update (Delta)</button>
+          </div>
+
+          <div id="template-greenfield" class="template-content active">
+            <div class="template-block">
+              <div class="template-block-header">
+                <span class="template-block-label">Greenfield Design Specification Template</span>
+                <button class="copy-btn" data-target="greenfield-template-code">Copy Template</button>
+              </div>
+              <pre id="greenfield-template-code" class="template-block-content"><code># Design Specification: [Feature/Product Name]
+# Version: 1.0 | Date: [YYYY-MM-DD] | Author: [Name]
+# Regulatory: FDA 21 CFR 820.30, IEC 62304, IEC 62366
+
+## Verification Status
+
+| Field | Value |
+|-------|-------|
+| Verified by | [Designer Name] |
+| Verified at | [Merge commit SHA on main] |
+| Verification date | [YYYY-MM-DD] |
+| Status | VERIFIED |
+
+---
+
+## 1. Document Header
+
+| Field | Value |
+|-------|-------|
+| Document ID | DS-[PROJECT]-[FEATURE]-001 |
+| Version | 1.0 |
+| Date | [YYYY-MM-DD] |
+| Author | [Your name] |
+| Reviewed by | [Designer name], [QA name] |
+| Approved by | [Approver name] |
+| Feature Scope | [Brief description of what this spec covers] |
+| Applicable Standards | FDA 21 CFR 820.30(d), IEC 62304 &sect;5.3-5.4, IEC 62366 &sect;5.6 |
+
+---
+
+## 2. Design Intent
+
+### Purpose
+[What does this feature do? What problem does it solve?]
+
+### User Needs Addressed
+| User Need ID | Description | Source Document |
+|-------------|-------------|-----------------|
+| UN-001 | [User need description] | [Reference to user needs doc] |
+| UN-002 | [User need description] | [Reference] |
+
+### Design Input References
+| Design Input ID | Description | Traces to User Need |
+|----------------|-------------|---------------------|
+| DI-001 | [Design input description] | UN-001 |
+| DI-002 | [Design input description] | UN-001, UN-002 |
+
+---
+
+## 3. Screen Inventory
+
+| Screen Name | Purpose | Navigation Path | Parent |
+|------------|---------|-----------------|--------|
+| [ScreenName] | [What the user does here] | [How to get here] | [Parent screen] |
+
+### Screen Descriptions
+#### [Screen 1 Name]
+- **Purpose:** [What this screen does]
+- **Entry points:** [How users arrive here]
+- **Exit points:** [Where users go from here]
+- **Screenshot:** [Reference to screenshot or rendered view]
+
+---
+
+## 4. Component Specification
+
+### [Component Name]
+- **Purpose:** [What this component does]
+- **Location:** [Which screens use this component]
+- **Code path:** `[src/components/ComponentName.tsx]`
+
+| State | Visual Description | Behavior |
+|-------|-------------------|----------|
+| Default | [Description] | [Behavior] |
+| Hover | [Description] | [Behavior] |
+| Active/Pressed | [Description] | [Behavior] |
+| Disabled | [Description] | [Behavior] |
+| Error | [Description] | [Behavior] |
+| Loading | [Description] | [Behavior] |
+
+**Accessibility:** [ARIA labels, role, keyboard behavior]
+
+---
+
+## 5. Layout &amp; Visual Design
+
+### Grid System
+- [Grid type, column count, gutter width]
+
+### Spacing Scale
+- [Spacing tokens used: 4, 8, 12, 16, 24, 32, 48...]
+
+### Typography
+| Role | Font | Weight | Size | Line Height |
+|------|------|--------|------|-------------|
+| H1 | [Font] | [Weight] | [Size] | [LH] |
+| Body | [Font] | [Weight] | [Size] | [LH] |
+
+### Color Usage
+| Token | Hex | Usage |
+|-------|-----|-------|
+| primary | [#hex] | [Where used] |
+| error | [#hex] | [Where used] |
+
+### Responsive Breakpoints
+| Breakpoint | Width | Layout Changes |
+|-----------|-------|----------------|
+| Mobile | &lt;768px | [Changes] |
+| Tablet | 768-1024px | [Changes] |
+| Desktop | &gt;1024px | [Changes] |
+
+---
+
+## 6. Interaction Design
+
+### User Flows
+#### Flow: [Flow Name]
+1. User [action] &rarr; System [response]
+2. User [action] &rarr; System [response]
+3. [Continue flow...]
+
+**Error path:** [What happens when something goes wrong]
+**Edge case:** [Notable edge cases handled]
+
+### Transitions
+| From | To | Trigger | Animation |
+|------|-----|---------|-----------|
+| [State A] | [State B] | [User action] | [Transition description] |
+
+### Loading States
+- [How loading is indicated per screen/component]
+
+---
+
+## 7. Data Display
+
+### [Data Element Name]
+| Field | Format | Example | Empty State | Error State |
+|-------|--------|---------|-------------|-------------|
+| [field] | [format rule] | [example] | [what shows when empty] | [what shows on error] |
+
+### Real-time Updates
+- [How data freshness is indicated]
+- [Update frequency and mechanism]
+
+---
+
+## 8. Design Rationale
+
+### [Decision 1: e.g., "Card-based layout for vitals"]
+- **Choice:** [What was chosen]
+- **Alternatives considered:** [What else was evaluated]
+- **Rationale:** [Why this choice was made]
+- **Traces to:** DI-001 (user need for quick scanning)
+
+### [Decision 2]
+[Same format...]
+
+---
+
+## 9. Design System Alignment
+
+### Tokens Used
+| Token Category | Tokens | Source |
+|---------------|--------|--------|
+| Colors | [List] | [Design system reference] |
+| Typography | [List] | [Design system reference] |
+| Spacing | [List] | [Design system reference] |
+
+### Deviations
+| Deviation | Justification |
+|-----------|---------------|
+| [What deviated from design system] | [Why] |
+
+---
+
+## 10. Accessibility
+
+| Requirement | Implementation | WCAG Level |
+|------------|----------------|------------|
+| Color contrast | [Ratio achieved] | AA / AAA |
+| Keyboard navigation | [Tab order description] | A |
+| Screen reader | [ARIA implementation] | A |
+| Touch targets | [Minimum size] | AA |
+| Reduced motion | [prefers-reduced-motion handling] | AAA |
+
+---
+
+## 11. Traceability Matrix
+
+| User Need | Design Input | Spec Section | Code File | Component |
+|-----------|-------------|--------------|-----------|-----------|
+| UN-001 | DI-001 | &sect;4 ComponentName | src/components/X.tsx | ComponentName |
+| UN-002 | DI-002 | &sect;6 Flow: Login | src/screens/Login.tsx | LoginScreen |
+
+---
+
+## Revision History &amp; Changelog
+
+| Version | Date | Author | Git Ref | Summary |
+|---------|------|--------|---------|---------|
+| 1.0 | [Date] | [Author] | [SHA] | Initial specification extracted from codebase |
+
+&gt; **Note:** This spec should be modular. For multi-feature products, create per-feature
+&gt; sub-specs (e.g., `design-specs/patient-detail.md`) with an index file linking them.
+&gt; Each sub-spec carries its own verification header and changelog.</code></pre>
+            </div>
+          </div>
+
+          <div id="template-brownfield" class="template-content">
+            <div class="template-block">
+              <div class="template-block-header">
+                <span class="template-block-label">Brownfield Design Specification Template (Feature Addition)</span>
+                <button class="copy-btn" data-target="brownfield-template-code">Copy Template</button>
+              </div>
+              <pre id="brownfield-template-code" class="template-block-content"><code># Design Specification Addendum: [Feature Name]
+# Parent Spec: DS-[PROJECT]-[BASE]-[VERSION]
+# Version: 1.0 | Date: [YYYY-MM-DD] | Author: [Name]
+# Regulatory: FDA 21 CFR 820.30, IEC 62304, IEC 62366
+
+## Verification Status
+
+| Field | Value |
+|-------|-------|
+| Verified by | [Designer Name] |
+| Verified at | [Merge commit SHA on main] |
+| Verification date | [YYYY-MM-DD] |
+| Status | VERIFIED |
+
+---
+
+## 1. Document Header
+
+| Field | Value |
+|-------|-------|
+| Document ID | DS-[PROJECT]-[FEATURE]-001 |
+| Parent Specification | [Reference to existing design spec] |
+| Version | 1.0 |
+| Date | [YYYY-MM-DD] |
+| Author | [Your name] |
+| Change Type | Feature Addition / Enhancement / Modification |
+| Feature Scope | [What this addendum covers] |
+
+---
+
+## 2. Change Summary
+
+### What's New
+[High-level description of the new feature/changes]
+
+### What's Modified
+| Existing Component | Change Description | Reason |
+|-------------------|-------------------|---------|
+| [Component] | [What changed] | [Why] |
+
+### What's Unchanged
+[Reference to parent spec sections that remain valid]
+
+---
+
+## 3. Design Intent (Delta)
+
+### New User Needs Addressed
+| User Need ID | Description | Source |
+|-------------|-------------|--------|
+| UN-XXX | [New user need] | [Reference] |
+
+### New Design Inputs
+| Design Input ID | Description | Traces to |
+|----------------|-------------|-----------|
+| DI-XXX | [New design input] | UN-XXX |
+
+---
+
+## 4. New Screens
+
+| Screen Name | Purpose | Navigation Path | Relationship to Existing |
+|------------|---------|-----------------|-------------------------|
+| [New screen] | [Purpose] | [Path] | [How it connects to existing screens] |
+
+---
+
+## 5. New / Modified Components
+
+### [New Component Name]
+[Full component spec — same format as greenfield &sect;4]
+
+### [Modified Component Name]
+- **Previous behavior:** [What it did before]
+- **New behavior:** [What it does now]
+- **Reason for change:** [Why]
+- **Impact on existing flows:** [What existing functionality is affected]
+
+---
+
+## 6. New Interactions &amp; Flows
+
+### Flow: [New Flow Name]
+[Full flow spec — same format as greenfield &sect;6]
+
+### Modified Flows
+| Original Flow | Change | Impact |
+|--------------|--------|--------|
+| [Flow name] | [What changed] | [Impact on user experience] |
+
+---
+
+## 7. New Data Display Rules
+
+[Same format as greenfield &sect;7 — only for new/changed data]
+
+---
+
+## 8. Design Rationale (Delta)
+
+### [Decision: Why this feature was added]
+- **Context:** [What prompted this addition]
+- **Choice:** [Design approach taken]
+- **Alternatives:** [What else was considered]
+- **Traces to:** DI-XXX
+
+---
+
+## 9. Delta Traceability Matrix
+
+| User Need | Design Input | Spec Section | Code File | Change Type |
+|-----------|-------------|--------------|-----------|-------------|
+| UN-XXX | DI-XXX | &sect;5 NewComponent | src/new/File.tsx | NEW |
+| UN-001 | DI-001 | &sect;5 ModifiedComp | src/existing/File.tsx | MODIFIED |
+
+---
+
+## 10. Impact Assessment
+
+### Risk Analysis
+| Change | Risk | Mitigation |
+|--------|------|------------|
+| [Change description] | [Potential risk] | [How mitigated] |
+
+### Regression Considerations
+- [What existing functionality could be affected]
+- [Testing required to verify no regression]
+
+---
+
+## Revision History &amp; Changelog
+
+| Version | Date | Author | Git Ref | Summary |
+|---------|------|--------|---------|---------|
+| 1.0 | [Date] | [Author] | [SHA] | Initial feature addition spec extracted from codebase |</code></pre>
+            </div>
+          </div>
+
+          <div id="template-update" class="template-content">
+            <div class="template-block">
+              <div class="template-block-header">
+                <span class="template-block-label">Update / Change Template (Delta Mode)</span>
+                <button class="copy-btn" data-target="update-template-code">Copy Template</button>
+              </div>
+              <pre id="update-template-code" class="template-block-content"><code># Spec Update: [Feature Name]
+# Previous Version: [X.Y] at commit [SHA]
+# Updated Version: [X.Z] | Date: [YYYY-MM-DD] | Author: [Name]
+
+## Verification Status
+
+| Field | Value |
+|-------|-------|
+| Verified by | [Designer Name or PENDING RE-VERIFICATION] |
+| Verified at | [New merge commit SHA on main] |
+| Verification date | [YYYY-MM-DD] |
+| Status | STALE &rarr; RE-VERIFIED (after design review) |
+
+---
+
+## 1. Delta Summary
+
+### Commit Range
+- **From:** [Previous verified merge SHA]
+- **To:** [Current merge SHA / branch]
+
+### Files Changed
+| File | Change Type | Lines Modified |
+|------|------------|----------------|
+| [src/ui/ComponentX.tsx] | Modified | [+15, -8] |
+| [src/ui/NewComponent.tsx] | Added | [+120] |
+
+### Change Overview
+[Brief narrative: what changed and why]
+
+---
+
+## 2. Updated Spec Sections
+
+### [Section Name] (was &sect;N in previous spec)
+
+#### Previous
+[Previous spec content for this section]
+
+#### Updated
+[New spec content for this section]
+
+#### Rationale for Change
+[Why this section changed — traces to design input or engineering requirement]
+
+---
+
+## 3. New Changelog Entry
+
+| Version | Date | Author | Git Ref | Summary |
+|---------|------|--------|---------|---------|
+| [X.Z] | [Date] | [Author] | [SHA range] | [Summary of changes] |
+
+---
+
+## 4. Re-Verification Recommendation
+
+### Sections Requiring Design Re-Review
+| Section | Reason | Priority |
+|---------|--------|----------|
+| [Section N] | [Why re-review needed] | High / Medium / Low |
+
+### Sections Unchanged (No Re-Review Needed)
+[List sections that were not affected by the code changes]
+
+---
+
+## 5. Impact Assessment
+
+### Affected User Flows
+| Flow | Impact | Regression Risk |
+|------|--------|-----------------|
+| [Flow name] | [How affected] | High / Medium / Low |
+
+### Traceability Impact
+| User Need | Design Input | Previous Spec Section | Updated Section |
+|-----------|-------------|----------------------|-----------------|
+| [UN-XXX] | [DI-XXX] | [Previous &sect;N] | [Updated &sect;N] |</code></pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 13 — WORKED EXAMPLES                         -->
+    <!-- ============================================ -->
+    <section id="examples" class="section section--alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-number">13</span>
+          <h2 class="section-title">Worked Examples</h2>
+          <p class="section-subtitle">Two scenarios showing the methodology end-to-end.</p>
+        </div>
+        <div class="section-content">
+
+          <div class="example-tabs">
+            <button class="example-tab active" data-example="admin-hub">Admin Hub (Greenfield)</button>
+            <button class="example-tab" data-example="mobile-hub">Mobile Hub (Brownfield)</button>
+          </div>
+
+          <div id="example-admin-hub" class="example-content active">
+            <div class="example-narrative">
+              <div class="example-step">
+                <div class="example-step-label">Scenario</div>
+                <p>You've built an <strong>Admin Hub</strong> from scratch using Claude Code &mdash; a web dashboard for configuring patient monitoring settings, managing sensor assignments, and setting alert thresholds. The codebase is complete and working. No design spec exists. You need to generate one for the DHF.</p>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Step 1 &mdash; Codebase Analysis Prompt</div>
+                <div class="prompt-block prompt-block--example">
+                  <pre class="prompt-block-content"><code>Read the entire Admin Hub codebase at /src. Map the following:
+1. Every screen/page: name, route, purpose
+2. Component tree: parent-child relationships
+3. Shared components and utilities
+4. Data models and API endpoints consumed
+5. Navigation structure and user flows
+6. Design system usage: tokens, theme, shared styles
+
+Output a structured codebase analysis document.</code></pre>
+                </div>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Step 2 &mdash; Design Decision Extraction</div>
+                <div class="prompt-block prompt-block--example">
+                  <pre class="prompt-block-content"><code>Using the codebase analysis, extract every design decision:
+1. Layout patterns: grid systems, responsive behavior, page structure
+2. Component states: all states each component handles
+3. Interaction patterns: forms, modals, navigation, real-time updates
+4. Visual design: colors, typography, spacing, iconography
+5. Data display: formatting rules, units, empty/error states
+6. Error handling: validation, error messages, recovery flows
+7. Accessibility: ARIA usage, keyboard nav, contrast, screen reader support
+
+For each decision, note the rationale (why this approach vs alternatives)
+and the code file where it's implemented.</code></pre>
+                </div>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Step 3 &mdash; Spec Generation</div>
+                <div class="prompt-block prompt-block--example">
+                  <pre class="prompt-block-content"><code>Generate a complete Design Specification document following the
+11-section template. The document must:
+- Reference specific code files for every component and screen
+- Include all component states discovered in the extraction
+- Document every user flow with error paths
+- Map to these design inputs: [DI-001: ..., DI-002: ...]
+- Include a traceability matrix linking user needs to code files
+- Use formal regulatory language suitable for a DHF
+
+Output as a single Markdown document.</code></pre>
+                </div>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Result</div>
+                <p>Claude Code produces a complete design specification covering the Admin Hub's 8 screens, 24 components, 12 user flows, and full traceability matrix. The designer reviews for visual consistency, QA reviews for traceability. After one round of revisions (two missing error states, one incomplete flow), the spec is approved and enters the DHF.</p>
+              </div>
+            </div>
+
+            <div class="section-image-container">
+              <img src="images/example-admin-hub.jpg" alt="Admin dashboard interface with configuration panels and monitoring controls" class="section-image" loading="lazy">
+            </div>
+          </div>
+
+          <div id="example-mobile-hub" class="example-content">
+            <div class="example-narrative">
+              <div class="example-step">
+                <div class="example-step-label">Scenario</div>
+                <p>You've added <strong>vitals monitoring features</strong> to an existing Mobile Hub app using Claude Code &mdash; new Vitals Panel, Alert History, Clinical Notes, and a redesigned Patient Detail screen. An existing design spec covers the original app. You need a feature addition spec for the DHF.</p>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Step 1 &mdash; Codebase Analysis Prompt</div>
+                <div class="prompt-block prompt-block--example">
+                  <pre class="prompt-block-content"><code>Read the Mobile Hub codebase. I've added new features. Identify:
+1. NEW screens/composables not in the original spec
+2. MODIFIED screens/composables that existed before
+3. New shared components and utilities added
+4. New data models and Firebase paths consumed
+5. Changes to navigation structure
+6. New design tokens or theme changes
+
+Compare against the existing spec at [path] and document
+only what's new or changed.</code></pre>
+                </div>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Step 2 &mdash; Design Decision Extraction</div>
+                <div class="prompt-block prompt-block--example">
+                  <pre class="prompt-block-content"><code>For only the NEW and MODIFIED code, extract design decisions:
+1. New component patterns introduced (VitalCard, AlertItem, etc.)
+2. New interaction patterns (real-time updates, alert modals, etc.)
+3. Changes to existing patterns (Patient Detail layout changes)
+4. New data display rules (vital signs formatting, alert severity)
+5. New error/edge cases handled
+6. Impact on existing functionality
+
+For modified components, document BEFORE and AFTER behavior.</code></pre>
+                </div>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Step 3 &mdash; Spec Generation</div>
+                <div class="prompt-block prompt-block--example">
+                  <pre class="prompt-block-content"><code>Generate a Design Specification Addendum following the brownfield
+template. The addendum must:
+- Reference the parent spec: DS-MH-BASE-002
+- Clearly distinguish NEW vs MODIFIED vs UNCHANGED
+- Document new components with full state specifications
+- Document modified components with before/after behavior
+- Include delta traceability matrix
+- Include impact assessment for changes to existing functionality
+- Map to new design inputs: [DI-050: vitals monitoring, ...]
+
+Output as a single Markdown document.</code></pre>
+                </div>
+              </div>
+
+              <div class="example-step">
+                <div class="example-step-label">Result</div>
+                <p>Claude Code produces a specification addendum documenting 4 new screens, 15 new components, 8 modified components, and 6 new user flows. The delta traceability matrix maps new features to new design inputs while confirming existing traceability is preserved. After review, the addendum is approved and filed alongside the parent spec in the DHF.</p>
+              </div>
+            </div>
+
+            <div class="section-image-container">
+              <img src="images/example-mobile-hub.jpg" alt="Mobile health monitoring interface showing patient vitals and alert history" class="section-image" loading="lazy">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- FOOTER                                       -->
+    <!-- ============================================ -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <p class="footer-text">Design Specification from Code &mdash; A methodology for agentic DHF traceability.</p>
+          <p class="footer-refs">
+            References:
+            <a href="https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/cfrsearch.cfm?fr=820.30" target="_blank" rel="noopener">FDA 21 CFR 820.30</a> &middot;
+            <a href="https://www.iso.org/standard/38421.html" target="_blank" rel="noopener">IEC 62304</a> &middot;
+            <a href="https://www.iso.org/standard/63179.html" target="_blank" rel="noopener">IEC 62366</a>
+          </p>
+          <p class="footer-disclaimer">This methodology is provided for reference. Consult your quality management system and regulatory advisors for your specific compliance requirements.</p>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
